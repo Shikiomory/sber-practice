@@ -13,4 +13,6 @@ public interface ListFunctions {
     Object get_back();
     Object get_element(int index);
     void insert(int index, Object data);
+    void delete(int index);
+    Object[] to_array();
 }

@@ -3,19 +3,39 @@ package com.sbertech;
 public class LinkedList implements ListFunctions{
     private Node head;
     private Node tail;
-    private int size = 0;
+    private int size;
 
     public LinkedList() {
         head = null;
         tail = null;
+        size = 0;
     }
 
     public LinkedList(LinkedList list) {
+        size = 0;
         this.copy(list);
     }
 
-    private Node get_head() {
-        return head;
+    private Node get_node(int index) {
+        Node currentNode;
+
+        if (index <= size / 2) {
+            currentNode = head;
+
+            for (int i = 0; i < index; i++) {
+                currentNode = currentNode.next;
+            }
+
+        }
+
+        else {
+            currentNode = tail;
+
+            for (int i = size - 1; i > index; i--) {
+                currentNode = currentNode.prev;
+            }
+        }
+        return currentNode;
     }
 
     @Override
@@ -103,13 +123,9 @@ public class LinkedList implements ListFunctions{
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        Node currentNode = head;
-        int i = 0;
 
-        while (i < index) {
-            currentNode = currentNode.next;
-            i++;
-        }
+        Node currentNode = get_node(index);
+
         return currentNode.data;
     }
 
@@ -127,46 +143,35 @@ public class LinkedList implements ListFunctions{
 
     @Override
     public void copy(LinkedList list) {
-        int i = 0;
         this.clear();
         this.head = list.head;
         this.tail = list.tail;
         Node currentNode = list.head;
 
-        while (i < list.size()) {
+        for (int i = 0; i < list.size(); i++) {
             this.push_back(currentNode.data);
             currentNode = currentNode.next;
-            i++;
         }
     }
 
 
     @Override
     public void insert(int index, Object data) {
-
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
+
         else if (index == 0) {
             this.push_front(data);
         }
+
         else if (index == size ) {
             this.push_back(data);
         }
+
         else {
             Node elem  = new Node(data);
-            Node currentNode;
-            if (index <= size / 2) {
-                currentNode = head;
-                for (int i = 0; i < index; i++) {
-                    currentNode = currentNode.next;
-                }
-            } else {
-                currentNode = tail;
-                for (int i = size - 1; i > index; i--) {
-                    currentNode = currentNode.prev;
-                }
-            }
+            Node currentNode = get_node(index);
 
             elem.next = currentNode;
             elem.prev = currentNode.prev;
@@ -175,17 +180,57 @@ public class LinkedList implements ListFunctions{
             size++;
         }
     }
+    @Override
+    public void delete(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+
+        else if (index == 0) {
+            this.pop_front();
+        }
+
+        else if (index == size ) {
+            this.pop_back();
+        }
+
+        else {
+            Node currentNode = get_node(index);
+
+            currentNode.prev.next = currentNode.next;
+            currentNode.next.prev = currentNode.prev;
+            currentNode = null;
+            size--;
+        }
+    }
 
     @Override
     public void print() {
-        int i = 0;
+        if (size == 0) return;
+
         Node currentNode = head;
-        while (i < size) {
+
+        for (int i = 0; i < size; i++) {
             System.out.print(currentNode.data + " ");
             currentNode = currentNode.next;
-            i++;
         }
+
         System.out.println();
+
+    }
+
+    @Override
+    public Object[] to_array() {
+
+        Object[] array = new Object[size];
+
+        Node currentNode = head;
+
+        for (int i = 0; i < size; i++) {
+            array[i] = currentNode.data;
+            currentNode = currentNode.next;
+        }
+        return array;
     }
 }
 
