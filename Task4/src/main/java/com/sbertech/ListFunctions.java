@@ -11,5 +11,6 @@ public interface ListFunctions {
     //void copy(LinkedList list)
     Object get_front();
     Object get_back();
+    Object get_element(int index);
     void insert(int index, Object data);
 }

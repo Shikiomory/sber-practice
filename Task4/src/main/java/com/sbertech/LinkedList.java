@@ -1,13 +1,13 @@
 package com.sbertech;
 
 public class LinkedList implements ListFunctions{
-    private Element head;
-    private Element tail;
+    private Node head;
+    private Node tail;
     private int size = 0;
 
     @Override
     public void push_front(Object data) {
-        Element elem = new Element(data);
+        Node elem = new Node(data);
         if (size == 0) {
             head = elem;
             tail = elem;
@@ -23,7 +23,7 @@ public class LinkedList implements ListFunctions{
     @Override
     public void pop_front() {
         if (size != 0) {
-            Element elem = new Element();
+            Node elem = new Node();
             elem = head.next;
             head = elem;
             size--;
@@ -32,7 +32,7 @@ public class LinkedList implements ListFunctions{
 
     @Override
     public void push_back(Object data) {
-        Element elem = new Element(data);
+        Node elem = new Node(data);
         if (size == 0) {
             head = elem;
             tail = elem;
@@ -48,7 +48,7 @@ public class LinkedList implements ListFunctions{
     @Override
     public void pop_back() {
         if (size != 0) {
-            Element elem = new Element();
+            Node elem = new Node();
             elem = tail.prev;
             tail = null;
             tail = elem;
@@ -67,6 +67,19 @@ public class LinkedList implements ListFunctions{
     }
 
     @Override
+    public Object get_element(int index) {
+        Node currentNode = new Node();
+        currentNode = head;
+        int i = 0;
+
+        while (i < index) {
+            currentNode = currentNode.next;
+            i++;
+        }
+        return currentNode.data;
+    }
+
+    @Override
     public int size() {
         return size;
     }
@@ -74,7 +87,7 @@ public class LinkedList implements ListFunctions{
     @Override
     public void clear() {
         int i = 0;
-        Element elem = new Element();
+        Node elem = new Node();
 
         while (i < size) {
             elem = head;
@@ -88,7 +101,7 @@ public class LinkedList implements ListFunctions{
 //    @Override
 //    public void copy(LinkedList list) {
 //        int i = 0;
-//        Element elem = new Element();
+//        Node elem = new Node();
 //        while (i < list.size()) {
 //            this.push_back(elem.data);
 ////            head = head.next;
@@ -100,7 +113,7 @@ public class LinkedList implements ListFunctions{
 
     @Override
     public void insert(int index, Object data) {
-        Element elem  = new Element(data);
+        Node elem  = new Node(data);
 
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -112,7 +125,7 @@ public class LinkedList implements ListFunctions{
             this.push_back(data);
         }
         else {
-            Element currentNode = new Element();
+            Node currentNode = new Node();
             currentNode = head;
             int i = 0;
             while (i < index) {
@@ -131,7 +144,7 @@ public class LinkedList implements ListFunctions{
     @Override
     public void print() {
         int i = 0;
-        Element currentNode = new Element();
+        Node currentNode = new Node();
         currentNode = head;
         while (i < size) {
             System.out.print(currentNode.data + " ");
@@ -140,4 +153,22 @@ public class LinkedList implements ListFunctions{
         }
         System.out.println();
     }
+}
+
+class Node {
+    Object data;
+    Node next;
+    Node prev;
+
+    public Node() {
+        this.data = null;
+        this.next = null;
+        this.prev = null;
+    }
+    public Node(Object data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+
 }
