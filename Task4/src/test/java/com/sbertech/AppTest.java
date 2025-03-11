@@ -2,7 +2,7 @@ package com.sbertech;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.sbertech.Object.LinkedList;
+import com.sbertech.object.LinkedList;
 import org.junit.jupiter.api.Test;
 
 

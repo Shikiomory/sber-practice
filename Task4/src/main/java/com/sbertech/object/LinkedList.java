@@ -1,4 +1,4 @@
-package com.sbertech.Object;
+package com.sbertech.object;
 
 public class LinkedList implements ListFunctions{
     private Node head;

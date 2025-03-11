@@ -1,5 +1,5 @@
 package com.sbertech;
-import com.sbertech.Object.LinkedList;
+import com.sbertech.object.LinkedList;
 /**
  * Hello world!
  *
