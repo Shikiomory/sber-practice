@@ -1,4 +1,4 @@
-package com.sbertech;
+package com.sbertech.Object;
 
 public class LinkedList implements ListFunctions{
     private Node head;
@@ -25,7 +25,6 @@ public class LinkedList implements ListFunctions{
             for (int i = 0; i < index; i++) {
                 currentNode = currentNode.next;
             }
-
         }
 
         else {
@@ -190,7 +189,7 @@ public class LinkedList implements ListFunctions{
             this.pop_front();
         }
 
-        else if (index == size ) {
+        else if (index == size - 1) {
             this.pop_back();
         }
 

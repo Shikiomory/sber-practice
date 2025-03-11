@@ -1,4 +1,4 @@
-package com.sbertech;
+package com.sbertech.Object;
 
 public interface ListFunctions {
     void push_back(Object data);
