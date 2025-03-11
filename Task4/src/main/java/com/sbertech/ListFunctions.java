@@ -8,7 +8,7 @@ public interface ListFunctions {
     int size();
     void print();
     void clear();
-    //void copy(LinkedList list)
+    void copy(LinkedList list);
     Object get_front();
     Object get_back();
     Object get_element(int index);

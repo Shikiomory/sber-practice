@@ -5,6 +5,10 @@ public class LinkedList implements ListFunctions{
     private Node tail;
     private int size = 0;
 
+    private Node get_head() {
+        return head;
+    }
+
     @Override
     public void push_front(Object data) {
         Node elem = new Node(data);
@@ -86,29 +90,22 @@ public class LinkedList implements ListFunctions{
 
     @Override
     public void clear() {
-        int i = 0;
-        Node elem = new Node();
-
-        while (i < size) {
-            elem = head;
-            head = head.next;
-            elem = null;
-        }
-
+        head = null;
+        tail = null;
         size = 0;
     }
 
-//    @Override
-//    public void copy(LinkedList list) {
-//        int i = 0;
-//        Node elem = new Node();
-//        while (i < list.size()) {
-//            this.push_back(elem.data);
-////            head = head.next;
-//            elem = list.next_node(elem);
-//            i++;
-//        }
-//    }
+    @Override
+    public void copy(LinkedList list) {
+        int i = 0;
+        this.clear();
+        Node currentNode = list.head;
+        while (i < list.size()) {
+            this.push_back(currentNode.data);
+            currentNode = currentNode.next;
+            i++;
+        }
+    }
 
 
     @Override
