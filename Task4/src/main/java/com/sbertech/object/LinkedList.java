@@ -143,8 +143,6 @@ public class LinkedList implements ListFunctions{
     @Override
     public void copy(LinkedList list) {
         this.clear();
-        this.head = list.head;
-        this.tail = list.tail;
         Node currentNode = list.head;
 
         for (int i = 0; i < list.size(); i++) {

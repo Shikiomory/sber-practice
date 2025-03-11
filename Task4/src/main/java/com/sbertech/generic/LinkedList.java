@@ -3,7 +3,7 @@ package com.sbertech.generic;
 public class LinkedList<T> implements ListFunctions<T>{
     private Node<T> head;
     private Node<T> tail;
-    private int size;
+    private int size = 0;
 
     public LinkedList() {
         head = null;
@@ -12,7 +12,7 @@ public class LinkedList<T> implements ListFunctions<T>{
     }
 
     public LinkedList(LinkedList<? extends T> list) {
-        size = 0;
+        this();
         this.copy(list);
     }
 
@@ -142,8 +142,6 @@ public class LinkedList<T> implements ListFunctions<T>{
     @Override
     public void copy(LinkedList<? extends T> list) {
         this.clear();
-//        this.head = list.head;
-//        this.tail = list.tail;
         Node<? extends T> currentNode = list.head;
 
         for (int i = 0; i < list.size(); i++) {
