@@ -3,7 +3,7 @@ package com.sbertech.object;
 public class LinkedList implements ListFunctions{
     private Node head;
     private Node tail;
-    private int size;
+    private int size = 0;
 
     public LinkedList() {
         head = null;
@@ -12,7 +12,7 @@ public class LinkedList implements ListFunctions{
     }
 
     public LinkedList(LinkedList list) {
-        size = 0;
+        this();
         this.copy(list);
     }
 
