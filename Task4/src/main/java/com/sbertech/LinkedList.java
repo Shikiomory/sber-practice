@@ -5,6 +5,15 @@ public class LinkedList implements ListFunctions{
     private Node tail;
     private int size = 0;
 
+    public LinkedList() {
+        head = null;
+        tail = null;
+    }
+
+    public LinkedList(LinkedList list) {
+        this.copy(list);
+    }
+
     private Node get_head() {
         return head;
     }
@@ -26,11 +35,21 @@ public class LinkedList implements ListFunctions{
 
     @Override
     public void pop_front() {
-        if (size != 0) {
-            Node elem = new Node();
-            elem = head.next;
-            head = elem;
+        try {
+            if (size == 0) {
+                throw new IllegalStateException("pop_front: Список пуст");
+            }
+            else if (size == 1) {
+                head = null;
+                tail = null;
+            }
+            else {
+                head = head.next;
+                head.prev = null;
+            }
             size--;
+        } catch (IllegalStateException e) {
+            System.err.println("Ошибка: " + e.getMessage());
         }
     }
 
@@ -51,12 +70,21 @@ public class LinkedList implements ListFunctions{
 
     @Override
     public void pop_back() {
-        if (size != 0) {
-            Node elem = new Node();
-            elem = tail.prev;
-            tail = null;
-            tail = elem;
+        try {
+            if (size == 0) {
+                throw new IllegalStateException("pop_front: Список пуст");
+            }
+            else if (size == 1) {
+                head = null;
+                tail = null;
+            }
+            else {
+                tail = tail.prev;
+                tail.next = null;
+            }
             size--;
+        } catch (IllegalStateException e) {
+            System.err.println("Ошибка: " + e.getMessage());
         }
     }
 
@@ -67,13 +95,15 @@ public class LinkedList implements ListFunctions{
 
     @Override
     public Object get_back() {
-        return size == 0 ? null :tail.data;
+        return size == 0 ? null : tail.data;
     }
 
     @Override
     public Object get_element(int index) {
-        Node currentNode = new Node();
-        currentNode = head;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        Node currentNode = head;
         int i = 0;
 
         while (i < index) {
@@ -99,7 +129,10 @@ public class LinkedList implements ListFunctions{
     public void copy(LinkedList list) {
         int i = 0;
         this.clear();
+        this.head = list.head;
+        this.tail = list.tail;
         Node currentNode = list.head;
+
         while (i < list.size()) {
             this.push_back(currentNode.data);
             currentNode = currentNode.next;
@@ -110,7 +143,6 @@ public class LinkedList implements ListFunctions{
 
     @Override
     public void insert(int index, Object data) {
-        Node elem  = new Node(data);
 
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -122,12 +154,18 @@ public class LinkedList implements ListFunctions{
             this.push_back(data);
         }
         else {
-            Node currentNode = new Node();
-            currentNode = head;
-            int i = 0;
-            while (i < index) {
-                currentNode = currentNode.next;
-                i++;
+            Node elem  = new Node(data);
+            Node currentNode;
+            if (index <= size / 2) {
+                currentNode = head;
+                for (int i = 0; i < index; i++) {
+                    currentNode = currentNode.next;
+                }
+            } else {
+                currentNode = tail;
+                for (int i = size - 1; i > index; i--) {
+                    currentNode = currentNode.prev;
+                }
             }
 
             elem.next = currentNode;
@@ -141,8 +179,7 @@ public class LinkedList implements ListFunctions{
     @Override
     public void print() {
         int i = 0;
-        Node currentNode = new Node();
-        currentNode = head;
+        Node currentNode = head;
         while (i < size) {
             System.out.print(currentNode.data + " ");
             currentNode = currentNode.next;
