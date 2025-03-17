@@ -4,7 +4,7 @@ import com.sbertech.Operation;
 
 public class Multiplication extends Operation {
     @Override
-    public double exec(int b) {
+    public double exec(double a, double b) {
         return a * b;
     }
 }

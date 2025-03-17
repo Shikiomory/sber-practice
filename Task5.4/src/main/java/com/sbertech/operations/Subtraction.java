@@ -4,7 +4,7 @@ import com.sbertech.Operation;
 
 public class Subtraction extends Operation {
     @Override
-    public double exec(int b) {
+    public double exec(double a, double b) {
         return a - b;
     }
 }

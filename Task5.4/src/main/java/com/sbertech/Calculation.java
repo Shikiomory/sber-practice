@@ -1,53 +1,49 @@
 package com.sbertech;
 
+import com.sbertech.operations.*;
 import java.util.ArrayDeque;
 import java.util.Stack;
 
 public class Calculation {
-    private ArrayDeque<Token> tokens = new ArrayDeque<>();
-    private Stack<Character> numbers = new Stack<>();
-    private Stack<Character> operators = new Stack<>();
-    private  Operation operation;
-    public Calculation(ArrayDeque<Token> tokens) {
-        this.tokens = tokens;
-    }
+    private Operation[] operations = {new Summation(), new Subtraction(), new Multiplication(), new Division()};
+    private Stack<Double> op = new Stack<>();
 
-    public double exec() {
-        for(Token s: tokens) {
-            Type type = s.getType();
-//            System.out.println(type);
-            switch (type) {
-                case OPERAND:
-                    numbers.add(Integer.valueOf(s.getValue()));
-                    break;
-                case L_PARANTHESIS:
-                    operators.add(s.getValue().charAt(0));
-                    break;
-                case R_PARANTHESIS:
-                    while (operators.size() != 0 && operators.peek() != '(') {
-                        char operator = operators.pop();
-                    }
-                    operators.pop();
-//                    operators.add(s.getValue().charAt(0));
-                    break;
-                case OPERATOR:
-                    char newOper = s.getValue().charAt(0);
-                    while (operators.size() != 0 && Priority(operators.peek()) >= Priority(newOper)) {
-                        char operator = operators.pop();
-                        System.out.println(operator);
-                    }
-                    operators.add(newOper);
+    public double exec(ArrayDeque<String> prn) {
+        double a = 0;
+        double b = 0;
+        double c = 0;
+        for(String ar: prn) {
+            System.out.println(ar);
+            if (op.size() != 0 && (ar.charAt(0) == '+' || ar.charAt(0) == '-' || ar.charAt(0) == '*' || ar.charAt(0) == '/')) {
+//                op.pop();
+                b = op.pop();
+                a = op.pop();
+                switch (ar.charAt(0)) {
+                    case '+':
+                        c = operations[Comm.SUMMATION.ordinal()].exec(a, b);
+                        break;
+                    case '-':
+                        c =operations[Comm.SUBTRACTION.ordinal()].exec(a, b);
+                        break;
+                    case '*':
+                        c = operations[Comm.MULTIPLICATION.ordinal()].exec(a, b);
+                        break;
+                    case '/':
+                        c = operations[Comm.DIVISION.ordinal()].exec(a, b);
+                        break;
+                }
+                op.add(c);
+//                System.out.println(a);
+            }
+            else {
+                op.add(Double.valueOf(ar));
             }
         }
-        System.out.println(numbers);
-        System.out.println(operators);
-        return 0;
+        double answer = op.pop();
+        return answer;
     }
+}
 
-    public int Priority(char a) {
-        int val = 0;
-        if (a == '+' || a == '-') val = 1;
-        else if (a == '*' || a == '/') val = 2;
-        return val;
-    }
+enum Comm {
+    SUMMATION, SUBTRACTION, MULTIPLICATION, DIVISION
 }
