@@ -1,17 +1,15 @@
 package com.sbertech;
 
-import java.util.Scanner;
 import java.util.ArrayDeque;
 
 import static com.sbertech.Type.*;
 
 public class Parser {
     private ArrayDeque<Token> tokens = new ArrayDeque<>();
-    private Scanner scanner = new Scanner(System.in);
 
     public ArrayDeque<Token> Read(String expression) {
 //        System.out.println(expression);
-
+        tokens.clear();
         int i = 0;
         int c = 0;
         int len = expression.length();

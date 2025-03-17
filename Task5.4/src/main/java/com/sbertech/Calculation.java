@@ -13,7 +13,6 @@ public class Calculation {
         double b = 0;
         double c = 0;
         for(String ar: prn) {
-            System.out.println(ar);
             if (op.size() != 0 && (ar.charAt(0) == '+' || ar.charAt(0) == '-' || ar.charAt(0) == '*' || ar.charAt(0) == '/')) {
 //                op.pop();
                 b = op.pop();
