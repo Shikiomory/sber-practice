@@ -9,9 +9,6 @@ public class Parser {
 
     public ArrayDeque<Token> Read(String expression) {
         tokens.clear();
-        int c = 0;
-        int len = expression.length();
-        char[] ex = expression.toCharArray();
         String word;
         Token token;
         Lexer lexer = new Lexer(expression);
@@ -38,7 +35,7 @@ public class Parser {
 
             else if(Character.isDigit(curToken) || curToken == '.') {
                 word = "";
-                while (!lexer.isEmpty() && Character.isDigit(curToken) || curToken == '.') {
+                while (!lexer.isEmpty() && (Character.isDigit(curToken) || curToken == '.')) {
                     word += curToken;
                     curToken = lexer.nextToken();
                 }
