@@ -10,7 +10,6 @@ public class Parser {
     public ArrayDeque<Token> Read(String expression) {
         tokens.clear();
         String word;
-        Token token;
         Lexer lexer = new Lexer(expression);
         char curToken = lexer.nextToken();
         while (!lexer.isEmpty()) {
