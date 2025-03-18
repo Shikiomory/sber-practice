@@ -16,4 +16,8 @@ public class Lexer {
     public char nextToken() {
         return length != i ? str[i++] : '\0';
     }
+
+    public boolean isEmpty() {
+        return length != i ? false : true;
+    }
 }

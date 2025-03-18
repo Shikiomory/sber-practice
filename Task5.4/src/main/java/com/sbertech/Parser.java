@@ -16,8 +16,8 @@ public class Parser {
         Token token;
         Lexer lexer = new Lexer(expression);
         char curToken = lexer.nextToken();
-        while (curToken != '\0') {
-            while (curToken != '\0' && curToken == ' ') {
+        while (!lexer.isEmpty()) {
+            while (!lexer.isEmpty() && curToken == ' ') {
                 curToken = lexer.nextToken();
             }
 
@@ -38,7 +38,7 @@ public class Parser {
 
             else if(Character.isDigit(curToken) || curToken == '.') {
                 word = "";
-                while (curToken != '\0' && Character.isDigit(curToken) || curToken == '.') {
+                while (!lexer.isEmpty() && Character.isDigit(curToken) || curToken == '.') {
                     word += curToken;
                     curToken = lexer.nextToken();
                 }
