@@ -8,18 +8,54 @@ public class Lexer {
     private int length;
     private char token;
     private int i;
+    private Token tokenn;
 
     public Lexer(String str) {
         this.str = str.toCharArray();
         length = str.length();
         i = 0;
     }
-    public char nextToken() {
-        token = length != i ? str[i++] : '\0';
-        return token;
+
+    public Token nextTokenn() {
+            while (i < length && str[i] == ' ') {
+                i++;
+            }
+
+            if (str[i] == '(') {
+                tokenn = new Token(L_PARANTHESIS, "(");
+                i++;
+            }
+
+            else if(str[i] == ')') {
+                tokenn = new Token(R_PARANTHESIS, ")");
+                i++;
+            }
+
+            else if(isOperator(str[i])) {
+                tokenn = new Token(OPERATOR, Character.toString(str[i]));
+                i++;
+            }
+
+            else if(Character.isDigit(str[i])) {
+                String word = "";
+                while (i < length && (Character.isDigit(str[i]) || str[i] == '.')) {
+                    word += str[i];
+                    i++;
+                }
+                tokenn = new Token(OPERAND, word);
+            }
+
+            else {
+                i++;
+            }
+        return tokenn;
     }
 
     public boolean isEmpty() {
-        return token == '\0' ? true : false;
+        return i >= length;
+    }
+
+    private boolean isOperator(char a) {
+        return a == '+' || a == '-' || a == '*' || a == '/';
     }
 }
