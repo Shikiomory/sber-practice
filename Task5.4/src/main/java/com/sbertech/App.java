@@ -1,6 +1,5 @@
 package com.sbertech;
 
-import java.util.ArrayDeque;
 import java.util.Scanner;
 
 /**
