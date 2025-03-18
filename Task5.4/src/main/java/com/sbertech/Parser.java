@@ -8,7 +8,6 @@ public class Parser {
     private ArrayDeque<Token> tokens = new ArrayDeque<>();
 
     public ArrayDeque<Token> Read(String expression) {
-//        System.out.println(expression);
         tokens.clear();
         int i = 0;
         int c = 0;
@@ -16,44 +15,43 @@ public class Parser {
         char[] ex = expression.toCharArray();
         String word;
         Token token;
-        while (i < len) {
-            while (i < len && ex[i] == ' ') {
-                i++;
+        Lexer lexer = new Lexer(expression);
+        char curToken = lexer.nextToken();
+        while (curToken != '\0') {
+            while (curToken != '\0' && curToken == ' ') {
+                curToken = lexer.nextToken();
             }
 
-            if (ex[i] == '(') {
+            if (curToken == '(') {
                 tokens.add(new Token(L_PARANTHESIS, "("));
-                i++;
+                curToken = lexer.nextToken();
             }
 
-            else if(ex[i] == ')') {
+            else if(curToken == ')') {
                 tokens.add(new Token(R_PARANTHESIS, ")"));
-                i++;
+                curToken = lexer.nextToken();
             }
 
-            else if(isOperator(ex[i])) {
-                tokens.add(new Token(OPERATOR, Character.toString(ex[i])));
-                i++;
+            else if(isOperator(curToken)) {
+                tokens.add(new Token(OPERATOR, Character.toString(curToken)));
+                curToken = lexer.nextToken();
             }
 
-            else if(isDigit(ex[i])) {
+            else if(Character.isDigit(curToken) || curToken == '.') {
                 word = "";
-                while (i < len && isDigit(ex[i])) {
-                    word += ex[i];
+                while (curToken != '\0' && Character.isDigit(curToken) || curToken == '.') {
+                    word += curToken;
+                    curToken = lexer.nextToken();
                     i++;
                 }
                 tokens.add(new Token(OPERAND, word));
             }
 
             else {
-                i++;
+                curToken = lexer.nextToken();
             }
         }
         return tokens;
-    }
-
-    private boolean isDigit(char a) {
-        return a >= '0' && a <= '9';
     }
 
     private boolean isOperator(char a) {

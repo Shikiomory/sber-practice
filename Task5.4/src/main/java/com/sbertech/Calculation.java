@@ -14,7 +14,6 @@ public class Calculation {
         double c = 0;
         for(String ar: prn) {
             if (op.size() != 0 && (ar.charAt(0) == '+' || ar.charAt(0) == '-' || ar.charAt(0) == '*' || ar.charAt(0) == '/')) {
-//                op.pop();
                 b = op.pop();
                 a = op.pop();
                 switch (ar.charAt(0)) {
@@ -32,7 +31,6 @@ public class Calculation {
                         break;
                 }
                 op.add(c);
-//                System.out.println(a);
             }
             else {
                 op.add(Double.valueOf(ar));
