@@ -30,7 +30,6 @@ public class Lexer {
     }
     private boolean isLetter(char let) {
         let = Character.toLowerCase(let);
-//        return (let >= 'a' && let <= 'z') || (let >= 'а' && let <= 'я') || (let == 'ё');
         return (let >= 'а' && let <= 'я') || (let == 'ё');
 
     }
