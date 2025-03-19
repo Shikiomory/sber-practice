@@ -3,7 +3,7 @@ package com.sbertech;
 import java.io.BufferedReader;
 import java.io.*;
 
-public class Reader {
+public class Reader implements AutoCloseable{
     private  BufferedReader bufferedReader;
 
     public Reader(String path) throws FileNotFoundException{
@@ -12,5 +12,10 @@ public class Reader {
 
     public String nextLine() throws IOException {
         return bufferedReader.readLine();
+    }
+
+    @Override
+    public void close() throws Exception {
+        bufferedReader.close();
     }
 }
