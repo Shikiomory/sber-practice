@@ -1,14 +1,14 @@
 package com.sbertech.commands;
 
-import com.sbertech.Command;
-
 public class Pwd extends Command {
+
+    public Pwd() {
+        name = "pwd";
+        description = "Возвращает текущий каталог";
+    }
     @Override
-    public void action() {
+    public void action(String[] args) {
         System.out.println(System.getProperty("user.dir"));
     }
 
-    public static String description() {
-        return "Возвращает текущий каталог";
-    }
 }

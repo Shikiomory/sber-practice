@@ -1,15 +1,15 @@
 package com.sbertech.commands;
 
-import com.sbertech.Command;
-
 public class Exit extends Command {
 
+    public Exit() {
+        name = "exit";
+        description = "Завершает работу";
+    }
+
     @Override
-    public void action() {
+    public void action(String[] args) {
         com.sbertech.Console.exit = true;
     }
 
-    public static String description() {
-        return "Завершает работу";
-    }
 }

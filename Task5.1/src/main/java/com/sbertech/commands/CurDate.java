@@ -1,11 +1,16 @@
 package com.sbertech.commands;
 
-import com.sbertech.Command;
 import java.time.LocalDate;
 
 public class CurDate extends Command {
+
+    public CurDate() {
+        name = "date";
+        description = "Возвращает текущую дату в формате dd-MM-yyyy";
+    }
+
     @Override
-    public void action() {
+    public void action(String[] args) {
         LocalDate date = LocalDate.now();
         int year = date.getYear();
         int month = date.getMonthValue();
@@ -13,7 +18,4 @@ public class CurDate extends Command {
         System.out.printf("%02d-%02d-%d\n", day, month, year);
     }
 
-    public static String description() {
-        return "Возвращает текущую дату в формате dd-MM-yyyy";
-    }
 }
