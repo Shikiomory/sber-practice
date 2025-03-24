@@ -18,7 +18,7 @@ public class Multiple {
 
     public static int mult(int a, int b) throws EvenException {
         int result = a * b;
-        if (result % 2 != 0) { // Проверка на НЕчётность
+        if (result % 2 != 0) {
             throw new EvenException("Число нечетное");
         }
         return result;
