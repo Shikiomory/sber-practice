@@ -1,6 +1,7 @@
 package com.sbertech;
 
 import com.sbertech.commands.*;
+import com.sbertech.commands.Command;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -11,11 +12,11 @@ public class Console {
     public static boolean exit = false;
 
     public Console() {
-        commands.put("date", new CurDate());
-        commands.put("time", new Time());
-        commands.put("pwd", new Pwd());
-        commands.put("help", new Help(commands));
-        commands.put("exit", new Exit());
+        pushCommand(new CurDate());
+        pushCommand(new Time());
+        pushCommand(new Pwd());
+        pushCommand(new Help(commands));
+        pushCommand(new Exit());
     }
     public void exec() {
         while(!exit) {
@@ -33,6 +34,10 @@ public class Console {
                 System.out.printf("Ошибка: неизвестная команда '%s'\n", com);
             }
         }
+    }
+
+    private void pushCommand(Command command) {
+        commands.put(command.getName(), command);
     }
 }
 
