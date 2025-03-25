@@ -5,7 +5,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class Calculator {
-    private ArrayList<Double> history = new ArrayList<>();
+    private ArrayList<Answer> history = new ArrayList<>();
 
     public void exec(String expr) {
         Parser parser = new Parser();
@@ -14,14 +14,28 @@ public class Calculator {
         ArrayDeque<Token> input = parser.Read(expr);
         ArrayDeque<String> output = rpn.convert(input);
         double answer = calculation.exec(output);
-        history.add(answer);
+        history.add(new Answer(expr, answer));
 
         System.out.println(answer);
     }
 
     public void showHistory() {
-        for (double meaning: history) {
+        for (Answer meaning: history) {
             System.out.println(meaning);
         }
+    }
+}
+
+class Answer {
+    private Double value;
+    private String expression;
+
+    public Answer(String expression, Double value) {
+        this.expression = expression;
+        this.value = value;
+    }
+    @Override
+    public String toString() {
+        return expression + " = " + value;
     }
 }
