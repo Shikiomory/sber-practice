@@ -15,7 +15,7 @@ public class Parser {
 
     public Map<String, Integer> getWords() {
         try {
-            Reader reader = new Reader(path);
+            Reader reader = new BaseReader(path);
             String Line;
             while ((Line = reader.nextLine()) != null) {
                 Lexer lexer = new Lexer(Line);
