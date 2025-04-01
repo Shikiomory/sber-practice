@@ -1,38 +1,21 @@
 package com.sbertech;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+public class AppTest {
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+        @Test
+        void testMultiplySuccess() throws EvenException {
+            Multiple multiplier = new Multiple();
+            assertEquals(8, multiplier.multiply(2, 4));
+        }
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+        @Test
+        void testThrowsException() {
+            Multiple multiplier = new Multiple();
+            assertThrows(EvenException.class, () -> multiplier.multiply(3, 4));
+        }
 }
