@@ -24,7 +24,7 @@
 
     <dependency>
       <groupId>com.serializer</groupId>
-      <artifactId>Task8.2</artifactId>
+      <artifactId>json-serializer</artifactId>
       <version>1.0.0</version>
 
     </dependency>
