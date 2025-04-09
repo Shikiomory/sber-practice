@@ -7,7 +7,8 @@ public class JsonSerializer {
     private String JSONstring = "";
 
     public String serialize(Object object) throws JsonSerializationException {
-        System.out.println(object.getClass());
+//        System.out.println(object.getClass());
+        JSONstring += "{";
         for (Field field: object.getClass().getDeclaredFields()) {
 //            System.out.println(field);
             try {
@@ -19,8 +20,11 @@ public class JsonSerializer {
                         } else if (field.get(object) == object) {
                             throw new JsonSerializationException(field.getDeclaringClass().getSimpleName() + " " + field.getName() + " является рекурсивным");
                         }
-                        if (field.getType().isPrimitive() || field.getType() == String.class) {
+                        if (field.getType().isPrimitive()) {
                             primitiveSerialize(field, object);
+                        }
+                        else if (field.getType() == String.class) {
+                            stringSerialize(field, object);
                         }
                         else if (Collection.class.isAssignableFrom(field.getType())) {
                             collectionSerialize(field, object);
@@ -39,11 +43,17 @@ public class JsonSerializer {
                 System.err.println("Ошибка: " + e);
             }
         }
+        JSONstring += "}";
         return JSONstring;
     }
 
+
     private void primitiveSerialize(Field field, Object object) throws IllegalAccessException {
         JSONstring += "\"" + field.getName() + "\": " + field.get(object) + " ";
+    }
+
+    private void stringSerialize(Field field, Object object) throws IllegalAccessException {
+        JSONstring += "\"" + field.getName() + "\": \"" + field.get(object) + "\" ";
     }
 
     private void collectionSerialize(Field field, Object object) throws IllegalAccessException {
