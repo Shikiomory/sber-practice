@@ -22,16 +22,18 @@ public class App {
 //        }
         Scanner scanner = new Scanner(System.in);
         Db db = new Db(URL, USER, PASSWORD);
-        while (!exit) {
-            String a = scanner.next();
-            db.add(a, "Uncompleted");
-//            System.out.println(a);
-            db.done(a);
-            db.show();
-            if (a.equalsIgnoreCase("exit")) {
-                exit = true;
-            }
-        }
+//        while (!exit) {
+//            String a = scanner.next();
+//            db.add(a, "Uncompleted");
+////            System.out.println(a);
+//            db.done(a);
+//            db.show();
+//            if (a.equalsIgnoreCase("exit")) {
+//                exit = true;
+//            }
+//        }
+        Console console = new Console();
+        console.exec(db.getConnection());
     }
 
     private static void createTable(Connection connection) throws SQLException {
