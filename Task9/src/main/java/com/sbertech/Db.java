@@ -38,10 +38,10 @@ public class Db {
     }
 
     void done(String name) throws SQLException{
-//        String sql = "UPDATE users SET Status = 'Done' WHERE Name = '" + name + "'";
-        String sql = "UPDATE users SET Status = ? WHERE Name = ?;";
+      String sql = "UPDATE users SET Status = 'Done' WHERE Name = '" + name + "'";
+//        String sql = "UPDATE users SET Status = ? WHERE Name = ?;";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(2, "Done");
+//            statement.setString(1, "Done");
             statement.executeUpdate();
         }
     }

@@ -26,6 +26,7 @@ public class App {
             String a = scanner.next();
             db.add(a, "Uncompleted");
 //            System.out.println(a);
+            db.done(a);
             db.show();
             if (a.equalsIgnoreCase("exit")) {
                 exit = true;
