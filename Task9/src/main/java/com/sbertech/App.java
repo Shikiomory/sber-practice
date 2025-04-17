@@ -7,7 +7,6 @@ public class App {
     private static final String USER = "sa";
     private static final String PASSWORD = "";
 
-    private static Boolean exit = false;
     public static void main(String[] args) throws SQLException {
         Scanner scanner = new Scanner(System.in);
 

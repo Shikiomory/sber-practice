@@ -18,8 +18,11 @@ public class Console {
     private Map<String, Command> commands = new HashMap<>();
     private Scanner scanner = new Scanner(System.in);
     public static boolean exit = false;
+    private Db database;
 
     public Console(Db database) {
+        this.database = database;
+
         Reflections reflections = new Reflections("com.sbertech.commands");
         Set<Class<? extends Command>> subclasses = reflections.getSubTypesOf(Command.class);
 
@@ -49,8 +52,9 @@ public class Console {
         }
 
     }
+
     public void exec() {
-        while(!exit) {
+        while (!exit) {
             System.out.print("> ");
             String com = scanner.nextLine().trim();
             String[] args = com.split(" ");
@@ -63,13 +67,19 @@ public class Console {
                 try {
                     command.action(args);
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    log.error("Ошибка базы данных: {}", e.getMessage());
                 } catch (IndexOutOfBoundsException e) {
                     log.error("Количество полученных аргументов меньше количества нужных аргументов " + e.getMessage());
                 }
             } else {
                 System.out.printf("Ошибка: неизвестная команда '%s'\n", com);
             }
+        }
+
+        try {
+            database.close();
+        } catch (SQLException e) {
+            log.error("Ошибка при закрытии базы данных", e);
         }
     }
 
