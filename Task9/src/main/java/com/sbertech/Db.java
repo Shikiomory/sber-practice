@@ -1,8 +1,12 @@
 package com.sbertech;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
 public class Db {
+    private static final Logger log = LoggerFactory.getLogger(Db.class);
     private final String URL;
     private final String USER;
     private final String PASSWORD;
@@ -37,7 +41,7 @@ public class Db {
             createTable(connection);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Ошибка при инициализации таблицы", e);
         }
     }
 
