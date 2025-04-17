@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class Done extends Command{
     @Override
     public void action(String[] args) throws SQLException, IndexOutOfBoundsException{
-        String sql = "UPDATE users SET Status = ? WHERE Name = ?";
+        String sql = "UPDATE tasks SET Status = ? WHERE Name = ?";
         String name = args[1];
         String[] params = {"Done", name};
 

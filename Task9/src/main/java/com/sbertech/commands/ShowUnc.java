@@ -7,7 +7,7 @@ public class ShowUnc extends Command{
 
     @Override
     public void action(String[] args) throws SQLException {
-        String sql = "SELECT * FROM users WHERE Status = 'Not Done'";
+        String sql = "SELECT * FROM tasks WHERE Status = 'Not Done'";
 
         System.out.println("Список невыполненных задач:");
         database.execQuery(sql, args);

@@ -48,7 +48,7 @@ public class Db {
 
     private void createTable(Connection connection) throws SQLException {
         String sql = """
-                CREATE TABLE IF NOT EXISTS users (
+                CREATE TABLE IF NOT EXISTS tasks (
                 UID INT PRIMARY KEY AUTO_INCREMENT,
                 Name VARCHAR(50),
                 Status VARCHAR(50)

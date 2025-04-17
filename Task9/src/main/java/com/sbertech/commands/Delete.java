@@ -7,7 +7,7 @@ public class Delete extends Command{
 
     @Override
     public void action(String[] args) throws SQLException, IndexOutOfBoundsException{
-        String sql = "Delete From users WHERE Name = ?";
+        String sql = "Delete From tasks WHERE Name = ?";
         String name = args[1];
         String[] params = {name};
 
