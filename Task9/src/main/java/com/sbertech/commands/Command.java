@@ -2,7 +2,6 @@ package com.sbertech.commands;
 
 import com.sbertech.Db;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public abstract class Command {
