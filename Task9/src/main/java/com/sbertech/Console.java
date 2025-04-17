@@ -46,7 +46,7 @@ public class Console {
         }
 
     }
-    public void exec(Connection connection) {
+    public void exec(Db database) {
         while(!exit) {
             System.out.print("> ");
             String com = scanner.nextLine().trim();
@@ -56,12 +56,14 @@ public class Console {
             }
 
             Command command = commands.get(args[0].toLowerCase());
-//            System.out.println(args[0].toLowerCase());
+            command.setDatabase(database);
             if (command != null) {
                 try {
-                    command.action(args, connection);
+                    command.action(args);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
+                } catch (IndexOutOfBoundsException e) {
+                    System.err.println("Количество полученных аргументов меньше количества нужных аргументов " + e.getMessage());
                 }
             } else {
                 System.out.printf("Ошибка: неизвестная команда '%s'\n", com);

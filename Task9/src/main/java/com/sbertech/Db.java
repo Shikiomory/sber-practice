@@ -75,4 +75,19 @@ public class Db {
     public Connection getConnection() {
         return connection;
     }
+
+    public void close() throws SQLException {
+        if (connection != null) {
+            connection.close();
+        }
+    }
+
+    public void execUpdate(String sql, String[] args) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < args.length; i++) {
+                statement.setString(i + 1, args[i]);
+            }
+            statement.executeUpdate();
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.sbertech.commands;
 
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +12,10 @@ public class Help extends Command {
     }
 
     @Override
-    public void action(String[] args, Connection connection) {
+    public void action(String[] args) {
         if (args.length == 1) {
             for (String names : commands.keySet()) {
                 Command command = commands.get(names);
-//                System.out.printf("%-8s%s\n", command.getName(), command.getDescription());
                 CommandInfo info = command.getClass().getAnnotation(CommandInfo.class);
                 System.out.printf("%-8s%s\n", info.name(), info.description());
             }
@@ -26,8 +24,6 @@ public class Help extends Command {
             Command command = commands.get(args[1]);
 
             if (command != null) {
-//                System.out.printf("%-8s%s\n", command.getName(), command.getDescription());
-
                 CommandInfo info = command.getClass().getAnnotation(CommandInfo.class);
                 System.out.printf("%-8s%s\n", info.name(), info.description());
             }

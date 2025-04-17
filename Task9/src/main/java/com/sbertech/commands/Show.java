@@ -9,8 +9,9 @@ import java.sql.Statement;
 public class Show extends Command{
 
     @Override
-    public void action(String[] args, Connection connection) throws SQLException {
+    public void action(String[] args) throws SQLException {
         String sql = "SELECT * FROM users";
+        Connection connection = database.getConnection();
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             System.out.println("Список задач:");
