@@ -11,6 +11,7 @@ public class Db {
     private final String USER;
     private final String PASSWORD;
     private Connection connection;
+
     Db(String URL, String USER, String  PASSWORD) {
         this.URL = URL;
         this.USER = USER;
@@ -38,7 +39,7 @@ public class Db {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Соединение с H2 установлено!");
             if (connection != null) {
-            createTable(connection);
+                createTable(connection);
             }
         } catch (SQLException e) {
             log.error("Ошибка при инициализации таблицы", e);
