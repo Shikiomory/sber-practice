@@ -8,7 +8,7 @@ public class Done extends Command{
     public void action(String[] args) throws SQLException, IndexOutOfBoundsException{
         String sql = "UPDATE users SET Status = ? WHERE Name = ?";
         String name = args[1];
-        String[] params = {name, "Done"};
+        String[] params = {"Done", name};
 
         database.execUpdate(sql, params);
     }

@@ -12,7 +12,7 @@ public class App {
         Scanner scanner = new Scanner(System.in);
 
         Db db = new Db(URL, USER, PASSWORD);
-        Console console = new Console();
-        console.exec(db);
+        Console console = new Console(db);
+        console.exec();
     }
 }

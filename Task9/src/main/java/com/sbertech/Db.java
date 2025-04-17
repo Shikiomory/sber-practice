@@ -90,4 +90,21 @@ public class Db {
             statement.executeUpdate();
         }
     }
+
+//    public void execQuery(String sql, String[] args) throws SQLException {
+//        try (PreparedStatement statement = connection.prepareStatement(sql)){
+//            for (int i = 0; i < args.length; i++) {
+//                statement.setString(i + 1, args[i]);
+//            }
+//
+//            try(ResultSet resultSet = statement.executeQuery(sql)) {
+//                while (resultSet.next()) {
+//                    int uid = resultSet.getInt("UID");
+//                    String name = resultSet.getString("Name");
+//                    String status = resultSet.getString("Status");
+//                    System.out.printf("UID: %d, Name: %s, Status: %s%n", uid, name, status);
+//                }
+//            }
+//        }
+//    }
 }

@@ -17,7 +17,7 @@ public class Console {
     private Scanner scanner = new Scanner(System.in);
     public static boolean exit = false;
 
-    public Console() {
+    public Console(Db database) {
         Reflections reflections = new Reflections("com.sbertech.commands");
         Set<Class<? extends Command>> subclasses = reflections.getSubTypesOf(Command.class);
 
@@ -36,6 +36,7 @@ public class Console {
             else {
                 try {
                     instance = aClass.getDeclaredConstructor().newInstance();
+                    instance.setDatabase(database);
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                          NoSuchMethodException e) {
                     throw new RuntimeException(e);
@@ -46,7 +47,7 @@ public class Console {
         }
 
     }
-    public void exec(Db database) {
+    public void exec() {
         while(!exit) {
             System.out.print("> ");
             String com = scanner.nextLine().trim();
@@ -56,7 +57,6 @@ public class Console {
             }
 
             Command command = commands.get(args[0].toLowerCase());
-            command.setDatabase(database);
             if (command != null) {
                 try {
                     command.action(args);
