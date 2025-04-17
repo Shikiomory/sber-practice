@@ -3,9 +3,10 @@ package com.sbertech;
 import com.sbertech.commands.Command;
 import com.sbertech.commands.CommandInfo;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Console {
+    private static final Logger log = LoggerFactory.getLogger(Console.class);
     private Map<String, Command> commands = new HashMap<>();
     private Scanner scanner = new Scanner(System.in);
     public static boolean exit = false;
@@ -63,7 +65,7 @@ public class Console {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } catch (IndexOutOfBoundsException e) {
-                    System.err.println("Количество полученных аргументов меньше количества нужных аргументов " + e.getMessage());
+                    log.error("Количество полученных аргументов меньше количества нужных аргументов " + e.getMessage());
                 }
             } else {
                 System.out.printf("Ошибка: неизвестная команда '%s'\n", com);
@@ -74,8 +76,7 @@ public class Console {
     private void pushCommand(Command command) {
         CommandInfo annotation = command.getClass().getAnnotation(CommandInfo.class);
         if (annotation == null) {
-            System.err.printf("Команда %s не имеет аннотации @CommandInfo\n",
-                    command.getClass().getSimpleName());
+            log.error("Команда %s не имеет аннотации @CommandInfo\n", command.getClass().getSimpleName());
             return;
         }
         commands.put(annotation.name(), command);
