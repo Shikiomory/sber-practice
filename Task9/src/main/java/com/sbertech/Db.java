@@ -65,7 +65,6 @@ public class Db {
         try  {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Соединение с H2 установлено!");
-//            this.connection = connection;
             createTable(connection);
         } catch (SQLException e) {
             e.printStackTrace();
