@@ -10,7 +10,7 @@ public class ShowUnc extends Command{
 
     @Override
     public void action(String[] args) throws SQLException {
-        String sql = "SELECT * FROM users WHERE Status = 'UnDone'";
+        String sql = "SELECT * FROM users WHERE Status = 'Not Done'";
 
         Connection connection = database.getConnection();
         try (Statement statement = connection.createStatement();

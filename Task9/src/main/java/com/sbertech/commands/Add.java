@@ -9,7 +9,7 @@ public class Add extends Command{
     public void action(String[] args) throws SQLException, IndexOutOfBoundsException{
         String sql = "INSERT INTO users (Name, Status) VALUES (?, ?)";
         String name = args[1];
-        String status = "UnDone";
+        String status = "Not Done";
         String[] params = {name, status};
 
         database.execUpdate(sql, params);
