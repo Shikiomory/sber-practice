@@ -1,0 +1,203 @@
+package com.sbertech.database;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.sql.*;
+import java.util.*;
+
+public class Db {
+    private static final Logger log = LoggerFactory.getLogger(Db.class);
+    private final String URL;
+    private final String USER;
+    private final String PASSWORD;
+    private Connection connection;
+    private final String path = "TelegramBot\\src\\main\\java\\com\\sbertech\\resources\\database.csv";
+
+    public Db(String URL, String USER, String  PASSWORD) {
+        this.URL = URL;
+        this.USER = USER;
+        this.PASSWORD = PASSWORD;
+        initTable();
+    }
+
+    private void createTable(Connection connection) throws SQLException {
+        String sql = """
+                CREATE TABLE IF NOT EXISTS tasks (
+                UID INT PRIMARY KEY AUTO_INCREMENT,
+                Name VARCHAR(200),
+                Url VARCHAR(200),
+                Price FLOAT,
+                ChatId VARCHAR(200)
+                )
+                """;
+
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+            System.out.println("Таблица создана!");
+        }
+    }
+
+    private void initTable() {
+        try  {
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Соединение с H2 установлено!");
+            if (connection != null) {
+                createTable(connection);
+            }
+        } catch (SQLException e) {
+            log.error("Ошибка при инициализации таблицы", e);
+        }
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void close() throws SQLException {
+        if (connection != null) {
+            connection.close();
+        }
+    }
+
+    public void execUpdate(String sql, String[] args) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < args.length; i++) {
+                statement.setString(i + 1, args[i]);
+            }
+            statement.executeUpdate();
+        }
+    }
+
+//    public String execQuery(String sql, String[] args) throws SQLException {
+//        String returnMsg = "";
+//        try (Statement statement = connection.createStatement()){
+//
+//            try(ResultSet resultSet = statement.executeQuery(sql)) {
+//                while (resultSet.next()) {
+//                    int uid = resultSet.getInt("UID");
+//                    String name = resultSet.getString("Name");
+//                    String url = resultSet.getString("Url");
+//                    String price = resultSet.getString("Price");
+//                    returnMsg += String.format("UID: %d, Name: %s, Url: %s Price: %s%n", uid, name, url, price);
+//                }
+//            }
+//        }
+//        return returnMsg;
+//    }
+
+    public List<Map<String, Object>> execQuery(String sql) throws SQLException {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        try (Statement statement = connection.createStatement()){
+
+            try(ResultSet resultSet = statement.executeQuery(sql)) {
+                while (resultSet.next()) {
+                    Map<String, Object> row = new LinkedHashMap<>();
+                    int uid = resultSet.getInt("UID");
+                    String name = resultSet.getString("Name");
+                    String url = resultSet.getString("Url");
+                    String price = resultSet.getString("Price");
+                    String chatId = resultSet.getString("ChatId");
+                    row.put("UID", uid);
+                    row.put("Name", name);
+                    row.put("Url", url);
+                    row.put("Price", price);
+                    row.put("ChatId", chatId);
+//                    returnMsg += String.format("UID: %d, Name: %s, Url: %s Price: %s%n", uid, name, url, price);
+                    resultList.add(row);
+                }
+            }
+        }
+        return resultList;
+    }
+
+    public void save2File() throws SQLException {
+        String sql = "SELECT * FROM tasks";
+        try (Statement statement = connection.createStatement()) {
+
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))){
+                    int columnCount = resultSet.getMetaData().getColumnCount();
+                    for (int i = 1; i <= columnCount; ++i) {
+                        writer.write(resultSet.getMetaData().getColumnName(i));
+                        if (i < columnCount) {
+                            writer.write(",");
+                        }
+                    }
+                    writer.newLine();
+
+                    while (resultSet.next()) {
+                        for (int i = 1; i <= columnCount; i++) {
+                            writer.write(resultSet.getString(i) == null ? "Null" : resultSet.getString(i));
+                            if (i < columnCount) {
+                                writer.write(",");
+                            }
+                        }
+                        writer.newLine();
+                    }
+
+                    System.out.println("CSV файл успешно создан по пути: " + path);
+                } catch (IOException e) {
+                    log.error("Ошибка при записи в csv файл: " + e.getMessage());
+                }
+            }
+        }
+
+    }
+
+    public void readFromFile() throws SQLException {
+        String sql = "INSERT INTO tasks (Name, Url, Price, ChatId) VALUES (?, ?, ?, ?)";
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] args = line.split(",");
+                String name = args[1];
+                String url = args[2];
+                String price = args[3];
+                String chatid = args[4];
+                String[] params = {name, url, price, chatid};
+                execUpdate(sql, params);
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+//        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+//            for (int i = 0; i < args.length; i++) {
+//                statement.setString(i + 1, args[i]);
+//            }
+//            statement.executeUpdate();
+//        }
+
+
+    }
+
+//    public List<Map<String, Object>> execQuery(String sql, String[] args) throws SQLException {
+//        List<Map<String, Object>> resultList = new ArrayList<>();
+//
+//        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+//            for (int i = 0; i < args.length; ++i) {
+//                statement.setObject(i + 1, args[i]);
+//            }
+//
+//            try(ResultSet resultSet = statement.executeQuery()) {
+//                ResultSetMetaData metaData = resultSet.getMetaData();
+//                int columnCount = metaData.getColumnCount();
+//
+//                while(resultSet.next()) {
+//                    Map<String, Object> row = new HashMap<>();
+//                    for (int i = 1; i <= columnCount; ++i) {
+//                        String columnName = metaData.getColumnName(i);
+//                        Object value = resultSet.getObject(i);
+//                        row.put(columnName, value);
+//                    }
+//                    resultList.add(row);
+//                }
+//            }
+//        }
+//        return  resultList;
+//    }
+}
