@@ -9,17 +9,17 @@ import java.sql.SQLException;
 public class Clear extends Command {
 
     @Override
-    public void action(String[] args) throws SQLException, IndexOutOfBoundsException{
-        String sql = "Delete From tasks WHERE Name = ?";
-        String name = args[1];
-        String[] params = {name};
+    public void action(String[] args, long chat_id) throws SQLException, IndexOutOfBoundsException{
+        String sql = "Delete From tasks WHERE ChatId = ?";
+        String[] params = {String.valueOf(chat_id)};
 
         database.execUpdate(sql, params);
-        database.save2File();
+//        database.save2File();
     }
 
     @Override
-    public String getMsg() {
-        return "Все товары удалены из отслеживаемых";
+    public String[] getMsg() {
+        messages = new String[]{"Все товары удалены из отслеживаемых"};
+        return messages;
     }
 }

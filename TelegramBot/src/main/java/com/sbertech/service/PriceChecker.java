@@ -52,7 +52,7 @@ public class PriceChecker implements Job {
 
     private void notifyUser(String chatId, String name, float price, float newPrice, String url) {
         PriceFormatter priceFormatter = new PriceFormatter();
-        String msg = String.format("Цена на \"%s\" изменилась. Было %s\nСтало: %s\nСсылка на товар:\n %s", name, priceFormatter.format(price), newPrice, url);
+        String msg = String.format("Цена на \"%s\" изменилась. Было %s\nСтало: %s\nСсылка на товар:\n %s", name, price, newPrice, url);
         if (chatId != null) {
             checkerBot.sendMsg(msg, chatId);
         }

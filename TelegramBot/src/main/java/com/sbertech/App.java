@@ -13,7 +13,7 @@ import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 
 public class App 
 {
-    private static final String URL = "jdbc:h2:mem:testdb";
+    private static final String URL = "jdbc:h2:file:C:\\Users\\Shiko\\IdeaProjects\\sberpractice\\TelegramBot\\src\\main\\java\\com\\sbertech\\resources\\database";
     private static final String USER = "sa";
     private static final String PASSWORD = "";
 
@@ -22,7 +22,7 @@ public class App
         String botToken = args[0];
         try(TelegramBotsLongPollingApplication botsApplication = new TelegramBotsLongPollingApplication()) {
             Db database = new Db(URL, USER, PASSWORD);
-            database.readFromFile();
+//            database.readFromFile();
 
             CommandManager commandManager = new CommandManager(database);
             CheckerBot checkerBot = new CheckerBot(botToken, commandManager);
@@ -43,7 +43,7 @@ public class App
 
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.scheduleJob(job, trigger);
-            scheduler.start();
+//            scheduler.start();
             System.out.println("Планировщик запущен!");
 
 

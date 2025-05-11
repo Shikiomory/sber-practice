@@ -6,8 +6,9 @@ import java.sql.SQLException;
 
 public abstract class Command {
     protected Db database;
-    public abstract void action(String[] args) throws SQLException;
-    public abstract String getMsg();
+    protected String[] messages;
+    public abstract void action(String[] args, long chat_id) throws SQLException;
+    public abstract String[] getMsg();
     public void setDatabase(Db database) {
         this.database = database;
     }

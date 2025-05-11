@@ -13,9 +13,9 @@ public class Show extends Command {
     private String returnMsg;
 
     @Override
-    public void action(String[] args) throws SQLException {
+    public void action(String[] args, long chat_id) throws SQLException {
         PriceFormatter priceFormatter = new PriceFormatter();
-        String sql = String.format("SELECT * FROM tasks WHERE ChatId = '%s'",args[1]);
+        String sql = String.format("SELECT * FROM tasks WHERE ChatId = '%s'", String.valueOf(chat_id));
         returnMsg = "";
         List<Map<String, Object>> rows = database.execQuery(sql);
         for (Map<String, Object> row : rows) {
@@ -33,7 +33,8 @@ public class Show extends Command {
     }
 
     @Override
-    public String getMsg() {
-        return (returnMsg.isEmpty() ? "Нет отслеживаемых товаров" : "Список отслеживаемых товаров:\n" + returnMsg);
+    public String[] getMsg() {
+        messages = new String[]{returnMsg.isEmpty() ? "Нет отслеживаемых товаров" : "Список отслеживаемых товаров:\n" + returnMsg};
+        return messages;
     }
 }

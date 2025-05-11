@@ -9,14 +9,15 @@ import java.util.Map;
 @CommandInfo(name = "help", description = "Выводит список доступных команд")
 public class Help extends Command {
     private Map<String, Command> commands = new HashMap<>();
-    private String returnMsg = "";
+    private String returnMsg;
 
     public Help(Map<String, Command> commands) {
         this.commands = commands;
     }
 
     @Override
-    public void action(String[] args) {
+    public void action(String[] args, long chat_id) {
+        returnMsg = "";
         if (args.length == 1) {
             for (String names : commands.keySet()) {
                 Command command = commands.get(names);
@@ -38,7 +39,8 @@ public class Help extends Command {
     }
 
     @Override
-    public String getMsg() {
-        return "Список комманд:\n" + returnMsg;
+    public String[] getMsg() {
+        messages = new String[]{"Список комманд:\n" + returnMsg};
+        return messages;
     }
 }

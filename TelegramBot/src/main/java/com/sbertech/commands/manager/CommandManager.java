@@ -1,5 +1,6 @@
 package com.sbertech.commands.manager;
 
+import com.sbertech.commands.annotation.NeedsArgs;
 import com.sbertech.database.Db;
 import com.sbertech.commands.Command;
 import com.sbertech.commands.annotation.CommandInfo;
@@ -54,7 +55,7 @@ public class CommandManager {
 
     }
 
-    public String exec(String com) {
+    public String exec(String com, long chat_id) {
             String returnMsg = "";
             com = com.trim();
             String[] args = com.split(" ");
@@ -62,8 +63,8 @@ public class CommandManager {
             Command command = commands.get(args[0].toLowerCase());
             if (command != null) {
                 try {
-                    command.action(args);
-                    returnMsg = command.getMsg();
+                    command.action(args, chat_id);
+                    returnMsg = command.getMsg()[0]; // заглушка!!!!!!!!
                 } catch (SQLException e) {
                     log.error("Ошибка базы данных: {}", e.getMessage());
                 } catch (IndexOutOfBoundsException e) {
@@ -73,15 +74,16 @@ public class CommandManager {
             } else {
                 returnMsg = String.format("Ошибка: неизвестная команда '%s'\n", args[0]);
             }
-
-//        try {
-//            database.close();
-//        } catch (SQLException e) {
-//            log.error("Ошибка при закрытии базы данных", e);
-//        }
         return returnMsg;
     }
 
+    public Command getCommand(String command) {
+        return commands.get(command);
+    }
+
+    public boolean needsArgs(String command) {
+        return commands.get(command).getClass().isAnnotationPresent(NeedsArgs.class);
+    }
     private void pushCommand(Command command) {
         CommandInfo annotation = command.getClass().getAnnotation(CommandInfo.class);
         if (annotation == null) {
