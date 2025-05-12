@@ -2,6 +2,10 @@ package com.sbertech.service;
 
 import com.sbertech.bot.CheckerBot;
 import com.sbertech.database.Db;
+import com.sbertech.service.modes.ChangePriceMode;
+import com.sbertech.service.modes.LowPriceMode;
+import com.sbertech.service.modes.MorePriceMode;
+import com.sbertech.service.modes.PriceMode;
 import com.sbertech.util.PriceFormatter;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -19,6 +23,7 @@ public class PriceChecker implements Job {
     private static final Logger log = LoggerFactory.getLogger(PriceChecker.class);
     private Db database;
     private CheckerBot checkerBot;
+    private Map<String, PriceMode> priceModeMap = Map.of("1", new LowPriceMode(), "2", new MorePriceMode(), "3", new ChangePriceMode());
 
     public PriceChecker(Db database, CheckerBot checkerBot) {
         this.database = database;
@@ -35,13 +40,15 @@ public class PriceChecker implements Job {
             Parser parser = new SelParser((String)row.get("Url"));
             float newPrice = parser.getPrice();
 
-            if (newPrice == -1) {
-                checkerBot.sendMsg(String.format("Возникла ошибка с товаром, %s, возможно его больше не существует", (String)row.get("Name")),(String)row.get("ChatId"));
-            }
+            String mode = (String)row.get("Mode");
 
-            else if (newPrice <= price) {
+            if (newPrice == -1) {
+                checkerBot.sendMsg(String.format("Возникла ошибка с товаром, %s, возможно его больше не существует", (String)row.get("Name")),Long.valueOf((String)row.get("ChatId")));
+            }
+            else if (priceModeMap.get(mode).isChange(price, newPrice)) {
+//            else if (newPrice <= price) {
                 String name = (String)row.get("Name");
-                String chatId = (String)row.get("ChatId");
+                long chatId = Long.valueOf((String)row.get("ChatId"));
                 String url = (String)row.get("Url");
                 notifyUser(chatId, name, price, newPrice, url);
                 updatePrice((String)row.get("Uid"), String.valueOf(newPrice));
@@ -50,10 +57,10 @@ public class PriceChecker implements Job {
         }
     }
 
-    private void notifyUser(String chatId, String name, float price, float newPrice, String url) {
+    private void notifyUser(long chatId, String name, float price, float newPrice, String url) {
         PriceFormatter priceFormatter = new PriceFormatter();
-        String msg = String.format("Цена на \"%s\" изменилась. Было %s\nСтало: %s\nСсылка на товар:\n %s", name, price, newPrice, url);
-        if (chatId != null) {
+        String msg = String.format("Цена на \"%s\" изменилась.\nБыло %s\nСтало: %s\nСсылка на товар:\n %s", name, priceFormatter.format(price), priceFormatter.format(newPrice), url);
+        if (chatId != 0) {
             checkerBot.sendMsg(msg, chatId);
         }
         else {
@@ -65,7 +72,6 @@ public class PriceChecker implements Job {
         String sql = "UPDATE tasks SET Price = ? WHERE Uid = ?";
         String[] params = {newPrice, uid};
         database.execUpdate(sql, params);
-        database.save2File();
     }
 
     @Override

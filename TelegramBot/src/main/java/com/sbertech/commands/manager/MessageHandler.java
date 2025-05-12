@@ -23,4 +23,8 @@ public class MessageHandler {
         }
         return returnMsg;
     }
+
+    public boolean isActiveCommand(long chat_id) {
+        return stateManager.getState(chat_id) != null;
+    }
 }

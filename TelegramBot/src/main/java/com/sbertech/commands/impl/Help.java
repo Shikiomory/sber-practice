@@ -22,7 +22,9 @@ public class Help extends Command {
             for (String names : commands.keySet()) {
                 Command command = commands.get(names);
                 CommandInfo info = command.getClass().getAnnotation(CommandInfo.class);
-                returnMsg += String.format("%-8s%s\n", info.name(), info.description());
+                if (!names.equalsIgnoreCase("start")) {
+                    returnMsg += String.format("/%s - %s\n", info.name(), info.description());
+                }
             }
         }
         else {

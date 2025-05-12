@@ -29,6 +29,7 @@ public class Db {
                 Name VARCHAR(200),
                 Url VARCHAR(200),
                 Price FLOAT,
+                Mode INT,
                 ChatId VARCHAR(200)
                 )
                 """;
@@ -70,22 +71,6 @@ public class Db {
         }
     }
 
-//    public String execQuery(String sql, String[] args) throws SQLException {
-//        String returnMsg = "";
-//        try (Statement statement = connection.createStatement()){
-//
-//            try(ResultSet resultSet = statement.executeQuery(sql)) {
-//                while (resultSet.next()) {
-//                    int uid = resultSet.getInt("UID");
-//                    String name = resultSet.getString("Name");
-//                    String url = resultSet.getString("Url");
-//                    String price = resultSet.getString("Price");
-//                    returnMsg += String.format("UID: %d, Name: %s, Url: %s Price: %s%n", uid, name, url, price);
-//                }
-//            }
-//        }
-//        return returnMsg;
-//    }
 
     public List<Map<String, Object>> execQuery(String sql) throws SQLException {
         List<Map<String, Object>> resultList = new ArrayList<>();
@@ -99,11 +84,13 @@ public class Db {
                     String url = resultSet.getString("Url");
                     String price = resultSet.getString("Price");
                     String chatId = resultSet.getString("ChatId");
+                    String mode = resultSet.getString("Mode");
                     row.put("UID", uid);
                     row.put("Name", name);
                     row.put("Url", url);
                     row.put("Price", price);
                     row.put("ChatId", chatId);
+                    row.put("Mode", mode);
 //                    returnMsg += String.format("UID: %d, Name: %s, Url: %s Price: %s%n", uid, name, url, price);
                     resultList.add(row);
                 }
@@ -165,39 +152,8 @@ public class Db {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-//        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-//            for (int i = 0; i < args.length; i++) {
-//                statement.setString(i + 1, args[i]);
-//            }
-//            statement.executeUpdate();
-//        }
 
 
     }
 
-//    public List<Map<String, Object>> execQuery(String sql, String[] args) throws SQLException {
-//        List<Map<String, Object>> resultList = new ArrayList<>();
-//
-//        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-//            for (int i = 0; i < args.length; ++i) {
-//                statement.setObject(i + 1, args[i]);
-//            }
-//
-//            try(ResultSet resultSet = statement.executeQuery()) {
-//                ResultSetMetaData metaData = resultSet.getMetaData();
-//                int columnCount = metaData.getColumnCount();
-//
-//                while(resultSet.next()) {
-//                    Map<String, Object> row = new HashMap<>();
-//                    for (int i = 1; i <= columnCount; ++i) {
-//                        String columnName = metaData.getColumnName(i);
-//                        Object value = resultSet.getObject(i);
-//                        row.put(columnName, value);
-//                    }
-//                    resultList.add(row);
-//                }
-//            }
-//        }
-//        return  resultList;
-//    }
 }

@@ -21,15 +21,14 @@ public class Show extends Command {
         for (Map<String, Object> row : rows) {
             for (String elem: row.keySet()) {
                 if (elem.equalsIgnoreCase("Price")) {
-                    returnMsg += String.format("%s: %s\n",elem, priceFormatter.format(row.get(elem)));
+                    returnMsg += String.format("%s: %s\n",elem, priceFormatter.format(Float.valueOf((String)row.get(elem))));
                 }
-                else if (!elem.equalsIgnoreCase("ChatId")){
+                else if (!elem.equalsIgnoreCase("ChatId") && !elem.equalsIgnoreCase("Mode")){
                     returnMsg += String.format("%s: %s\n",elem, row.get(elem));
                 }
             }
             returnMsg += "\n";
         }
-//        returnMsg = database.execQuery(sql, args);
     }
 
     @Override

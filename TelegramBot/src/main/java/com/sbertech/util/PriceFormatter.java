@@ -1,8 +1,11 @@
 package com.sbertech.util;
 
-public class PriceFormatter {
+import java.text.NumberFormat;
+import java.util.Locale;
 
+public class PriceFormatter {
+    final private NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(new Locale("ru", "RU"));
     public String format(Object price) {
-        return String.format("%.2f", Float.valueOf((String)price)) + " руб.";
+        return currencyInstance.format((Float) price);
     }
 }

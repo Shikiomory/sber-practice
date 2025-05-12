@@ -28,12 +28,11 @@ public class StateManager {
 class CommandState {
     private int currentState;
     private String commandName;
-    private String args;
-
+    private String[] args;
     public CommandState(String commandName) {
         this.commandName = commandName;
         this.currentState = 0;
-        args = "";
+        args = new String[5];
     }
 
     public void nextState() {
@@ -45,14 +44,14 @@ class CommandState {
     }
     public void collectArgs(String arg) {
 //        args[currentState] = arg;
-        args += arg + " ";
+        args[currentState-1] = arg;
     }
 
     public String getCommand() {
         return commandName;
     }
 
-    public String getArgs() {
+    public String[] getArgs() {
         return args;
     }
 }

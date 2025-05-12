@@ -1,12 +1,12 @@
 package com.sbertech.commands.manager;
 
-import com.sbertech.bot.CheckerBot;
 import com.sbertech.commands.Command;
+
+import java.sql.SQLException;
 
 public class CommandHandler {
     CommandManager commandManager;
     StateManager stateManager;
-    CheckerBot checkerBot;
     Command command;
     public CommandHandler(CommandManager commandManager, StateManager stateManager) {
         this.commandManager = commandManager;
@@ -14,6 +14,11 @@ public class CommandHandler {
     }
 
     public String handleCommand(String commandName, long chat_id) {
+        if (commandName.equalsIgnoreCase("cancel")) {
+            stateManager.clearState(chat_id);
+            return "Команда отменена";
+        }
+
         command = commandManager.getCommand(commandName);
         if (command != null && commandManager.needsArgs(commandName)) {
             CommandState commandState = new CommandState(commandName);
@@ -31,14 +36,20 @@ public class CommandHandler {
         int currentStep = commandState.getCurrentState();
 
         commandState.collectArgs(arg);
-        String[] messages = command.getMsg();
-        if(currentStep < messages.length - 1) {
+        String[] messages;
+        if(currentStep < command.getMsg().length - 1) {
+            messages = command.getMsg();
             commandState.nextState();
             stateManager.setState(chat_id, commandState);
         }
         else {
-            commandManager.exec(commandState.getCommand() + " " + commandState.getArgs(), chat_id);
-//            System.out.println(commandState.getCommand() + commandState.getArgs());
+//            commandManager.exec(commandState.getCommand() + " " + commandState.getArgs(), chat_id);
+            try {
+                command.action(commandState.getArgs(), chat_id);
+                messages = command.getMsg();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             stateManager.clearState(chat_id);
         }
         return messages[currentStep];

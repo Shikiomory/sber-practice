@@ -17,7 +17,6 @@ public class Delete extends Command {
         String[] params = {name};
 
         database.execUpdate(sql, params);
-//        database.save2File();
     }
 
     @Override
