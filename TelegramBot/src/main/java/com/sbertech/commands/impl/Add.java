@@ -1,6 +1,7 @@
 package com.sbertech.commands.impl;
 
 import com.sbertech.commands.Command;
+import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
 import com.sbertech.commands.annotation.NeedsArgs;
 import com.sbertech.service.Parser;
@@ -9,6 +10,7 @@ import com.sbertech.service.SelParser;
 import java.sql.SQLException;
 
 @CommandInfo(name = "add", description = "Добавляет в список задачу")
+@ButtonName(name = "\uD83D\uDED2 Добавить товар")
 @NeedsArgs
 public class Add extends Command {
     private String returnMsg = "";

@@ -1,11 +1,13 @@
 package com.sbertech.commands.impl;
 
 import com.sbertech.commands.Command;
+import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
 
 import java.sql.SQLException;
 
 @CommandInfo(name = "clear", description = "очищает все товары")
+@ButtonName(name = "\uD83D\uDDD1\uFE0F Удалить все товары")
 public class Clear extends Command {
 
     @Override

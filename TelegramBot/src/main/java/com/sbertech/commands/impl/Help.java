@@ -1,12 +1,14 @@
 package com.sbertech.commands.impl;
 
 import com.sbertech.commands.Command;
+import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @CommandInfo(name = "help", description = "Выводит список доступных команд")
+@ButtonName(name = "\u2753 Помощь")
 public class Help extends Command {
     private Map<String, Command> commands = new HashMap<>();
     private String returnMsg;

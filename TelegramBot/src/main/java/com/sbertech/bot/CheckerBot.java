@@ -8,50 +8,26 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
     private TelegramClient telegramClient;
     private MessageHandler messageHandler;
+    private CommandManager commandManager;
     private ReplyKeyboardMarkup keyboardMarkup;
     private Map<String,String > commands = new HashMap<>();
-    private KeyobardFactory keyobardFactory;
+    private KeyboardFactory keyobardFactory;
     public CheckerBot(String botToken, CommandManager commandManager) {
+        this.commandManager = commandManager;
         telegramClient = new OkHttpTelegramClient(botToken);
         messageHandler = new MessageHandler(commandManager);
-        keyboardMarkup = initKeyboard();
-        commands = Map.of(
-                "\uD83D\uDED2 Добавить товар", "/add",
-                "\uD83D\uDCCB Посмотреть товары", "/show",
-                "\u274C Удалить товар", "/delete",
-                "\uD83D\uDDD1\uFE0F Удалить все товары", "/clear",
-                "\u2753 Помощь", "/help");
+        keyboardMarkup = KeyboardFactory.mainKeyboard();
     }
 
-    public ReplyKeyboardMarkup initKeyboard() {
-
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
-
-        KeyboardRow row = new KeyboardRow();
-        row.add("\uD83D\uDED2 Добавить товар");
-        row.add("\u274C Удалить товар");
-        row.add("\u2753 Помощь");
-        keyboardRows.add(row);
-
-        row = new KeyboardRow();
-
-        row.add("\uD83D\uDDD1\uFE0F Удалить все товары");
-        row.add("\uD83D\uDCCB Посмотреть товары");
-        keyboardRows.add(row);
-        return ReplyKeyboardMarkup.builder().keyboard(keyboardRows).resizeKeyboard(true).build();
-    }
     @Override
     public void consume(Update update) {
         // TODO
@@ -65,11 +41,10 @@ public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
             String msg_text = update.getMessage().getText();
             long chat_id = update.getMessage().getChatId();
 
-            String command = commands.getOrDefault(msg_text, msg_text);
+            String command = commandManager.getCommandName(msg_text);
 
             answer =  messageHandler.handleMessage(command, chat_id);
             sendMsg(answer, chat_id);
-
 
         }
     }
@@ -78,7 +53,7 @@ public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
         SendMessage msg;
 
         if (messageHandler.isActiveCommand(chat_id)) {
-            msg = SendMessage.builder().chatId(chat_id).text(message).replyMarkup(KeyobardFactory.cancelButton()).build();
+            msg = SendMessage.builder().chatId(chat_id).text(message).replyMarkup(KeyboardFactory.cancelButton()).build();
         } else {
             msg = SendMessage.builder().chatId(chat_id).text(message).replyMarkup(keyboardMarkup).build();
         }

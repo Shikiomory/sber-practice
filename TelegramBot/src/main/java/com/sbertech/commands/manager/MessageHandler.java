@@ -9,6 +9,7 @@ public class MessageHandler {
         commandHandler = new CommandHandler(commandManager, stateManager);
         nonComandHandler = new NonComandHandler(commandManager);
     }
+
     public String handleMessage(String msg_text, long chat_id) {
         String returnMsg;
         if (msg_text.startsWith("/")) {

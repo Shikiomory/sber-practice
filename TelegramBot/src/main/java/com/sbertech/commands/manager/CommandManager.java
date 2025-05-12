@@ -1,5 +1,6 @@
 package com.sbertech.commands.manager;
 
+import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.NeedsArgs;
 import com.sbertech.database.Db;
 import com.sbertech.commands.Command;
@@ -18,6 +19,7 @@ import java.util.Set;
 public class CommandManager {
     private static final Logger log = LoggerFactory.getLogger(CommandManager.class);
     private Map<String, Command> commands = new HashMap<>();
+    private Map<String, String> commandsNames = new HashMap<>();
     private Scanner scanner = new Scanner(System.in);
     public static boolean exit = false;
     private Db database;
@@ -85,13 +87,21 @@ public class CommandManager {
         return commands.get(command).getClass().isAnnotationPresent(NeedsArgs.class);
     }
     private void pushCommand(Command command) {
-        CommandInfo annotation = command.getClass().getAnnotation(CommandInfo.class);
-        if (annotation == null) {
+        CommandInfo commandInfo = command.getClass().getAnnotation(CommandInfo.class);
+        if (commandInfo == null) {
             log.error(String.format("Команда %s не имеет аннотации @CommandInfo\n", command.getClass().getSimpleName()));
             return;
         }
-        commands.put(annotation.name(), command);
+        commands.put(commandInfo.name(), command);
+
+        ButtonName buttonName = command.getClass().getAnnotation(ButtonName.class);
+        if (buttonName != null) {
+            commandsNames.put(buttonName.name(), "/"+commandInfo.name());
+        }
     }
 
+    public String getCommandName(String buttonName) {
+        return commandsNames.getOrDefault(buttonName, buttonName);
+    }
 }
 

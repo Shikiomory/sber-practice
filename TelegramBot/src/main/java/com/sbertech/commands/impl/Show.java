@@ -1,6 +1,7 @@
 package com.sbertech.commands.impl;
 
 import com.sbertech.commands.Command;
+import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
 import com.sbertech.util.PriceFormatter;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @CommandInfo(name = "show", description = "Показывает список всех задач")
+@ButtonName(name = "\uD83D\uDCCB Посмотреть товары")
 public class Show extends Command {
     private String returnMsg;
 

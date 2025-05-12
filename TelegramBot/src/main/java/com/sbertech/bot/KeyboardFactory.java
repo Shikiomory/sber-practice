@@ -1,0 +1,38 @@
+package com.sbertech.bot;
+
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class KeyboardFactory {
+
+    public static ReplyKeyboardMarkup mainKeyboard() {
+
+        //TODO
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+
+        KeyboardRow row = new KeyboardRow();
+        row.add("\uD83D\uDED2 Добавить товар");
+        row.add("\u274C Удалить товар");
+        row.add("\u2753 Помощь");
+        keyboardRows.add(row);
+
+        row = new KeyboardRow();
+
+        row.add("\uD83D\uDDD1\uFE0F Удалить все товары");
+        row.add("\uD83D\uDCCB Посмотреть товары");
+        keyboardRows.add(row);
+        return ReplyKeyboardMarkup.builder().keyboard(keyboardRows).resizeKeyboard(true).build();
+    }
+    public static InlineKeyboardMarkup cancelButton() {
+        InlineKeyboardButton cancel = InlineKeyboardButton.builder().text("Отменить команду").callbackData("/cancel").build();
+        InlineKeyboardRow inlineKeyboardButtons = new InlineKeyboardRow();
+        inlineKeyboardButtons.add(cancel);
+        return InlineKeyboardMarkup.builder().keyboardRow(inlineKeyboardButtons).build();
+    }
+}
