@@ -61,7 +61,7 @@ public class PriceChecker implements Job {
         PriceFormatter priceFormatter = new PriceFormatter();
         String msg = String.format("Цена на \"%s\" изменилась.\nБыло %s\nСтало: %s\nСсылка на товар:\n %s", name, priceFormatter.format(price), priceFormatter.format(newPrice), url);
         if (chatId != 0) {
-            checkerBot.sendMsg(msg, chatId);
+            checkerBot.notifyUser(msg, chatId);
         }
         else {
             log.error("Не удалось отправить уведомление: chatId отсутствует");

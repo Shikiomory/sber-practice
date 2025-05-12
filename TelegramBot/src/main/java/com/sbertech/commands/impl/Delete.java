@@ -15,8 +15,8 @@ public class Delete extends Command {
     @Override
     public void action(String[] args, long chat_id) throws SQLException, IndexOutOfBoundsException{
         String sql = "Delete From tasks WHERE Uid = ?";
-        String name = args[1];
-        String[] params = {name};
+        String uid = args[0];
+        String[] params = {uid};
 
         database.execUpdate(sql, params);
     }

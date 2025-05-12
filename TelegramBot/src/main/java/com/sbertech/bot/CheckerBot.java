@@ -11,16 +11,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
     private TelegramClient telegramClient;
     private MessageHandler messageHandler;
     private CommandManager commandManager;
     private ReplyKeyboardMarkup keyboardMarkup;
-    private Map<String,String > commands = new HashMap<>();
-    private KeyboardFactory keyobardFactory;
     public CheckerBot(String botToken, CommandManager commandManager) {
         this.commandManager = commandManager;
         telegramClient = new OkHttpTelegramClient(botToken);
@@ -75,6 +71,16 @@ public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void notifyUser(String message, long chat_id) {
+        SendMessage msg = SendMessage.builder().chatId(chat_id).text(message).replyMarkup(keyboardMarkup).build();
+
+        try {
+            telegramClient.execute(msg);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 }

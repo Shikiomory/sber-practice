@@ -28,4 +28,5 @@ public class MessageHandler {
     public boolean isActiveCommand(long chat_id) {
         return stateManager.getState(chat_id) != null;
     }
+
 }

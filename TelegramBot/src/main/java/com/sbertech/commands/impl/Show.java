@@ -3,6 +3,7 @@ package com.sbertech.commands.impl;
 import com.sbertech.commands.Command;
 import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
+import com.sbertech.util.FieldFormatter;
 import com.sbertech.util.PriceFormatter;
 
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import java.util.Map;
 @ButtonName(name = "\uD83D\uDCCB Посмотреть товары")
 public class Show extends Command {
     private String returnMsg;
+    private FieldFormatter fieldFormatter = new FieldFormatter();
 
     @Override
     public void action(String[] args, long chat_id) throws SQLException {
@@ -23,10 +25,10 @@ public class Show extends Command {
         for (Map<String, Object> row : rows) {
             for (String elem: row.keySet()) {
                 if (elem.equalsIgnoreCase("Price")) {
-                    returnMsg += String.format("%s: %s\n",elem, priceFormatter.format(Float.valueOf((String)row.get(elem))));
+                    returnMsg += String.format("%s: %s\n", fieldFormatter.getFormName(elem), priceFormatter.format(Float.valueOf((String)row.get(elem))));
                 }
                 else if (!elem.equalsIgnoreCase("ChatId") && !elem.equalsIgnoreCase("Mode")){
-                    returnMsg += String.format("%s: %s\n",elem, row.get(elem));
+                    returnMsg += String.format("%s: %s\n", fieldFormatter.getFormName(elem), row.get(elem));
                 }
             }
             returnMsg += "\n";
@@ -38,4 +40,5 @@ public class Show extends Command {
         messages = new String[]{returnMsg.isEmpty() ? "Нет отслеживаемых товаров" : "Список отслеживаемых товаров:\n" + returnMsg};
         return messages;
     }
+
 }

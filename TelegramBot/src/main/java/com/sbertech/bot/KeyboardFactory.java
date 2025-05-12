@@ -29,10 +29,19 @@ public class KeyboardFactory {
         keyboardRows.add(row);
         return ReplyKeyboardMarkup.builder().keyboard(keyboardRows).resizeKeyboard(true).build();
     }
+
     public static InlineKeyboardMarkup cancelButton() {
         InlineKeyboardButton cancel = InlineKeyboardButton.builder().text("Отменить команду").callbackData("/cancel").build();
         InlineKeyboardRow inlineKeyboardButtons = new InlineKeyboardRow();
         inlineKeyboardButtons.add(cancel);
+        return InlineKeyboardMarkup.builder().keyboardRow(inlineKeyboardButtons).build();
+    }
+
+    public static InlineKeyboardMarkup modeButtons() {
+        InlineKeyboardRow inlineKeyboardButtons = new InlineKeyboardRow();
+        inlineKeyboardButtons.add(InlineKeyboardButton.builder().text("\u0031\uFE0F\u20E3").callbackData("1").build());
+        inlineKeyboardButtons.add(InlineKeyboardButton.builder().text("\u0032\uFE0F\u20E3").callbackData("2").build());
+        inlineKeyboardButtons.add(InlineKeyboardButton.builder().text("\u0033\uFE0F\u20E3").callbackData("3").build());
         return InlineKeyboardMarkup.builder().keyboardRow(inlineKeyboardButtons).build();
     }
 }
