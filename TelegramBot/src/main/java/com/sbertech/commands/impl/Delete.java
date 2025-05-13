@@ -25,12 +25,12 @@ public class Delete extends Command {
 
     @Override
     public String[] getMsg() {
-        messages = new String[]{"Введите номер товара для удаления", "Товар удален из отслеживаемых"};
+        messages = new String[]{"Введите номер товара для удаления", "Вы точно хотите удалить этот товар?", "Товар удален из отслеживаемых"};
         return messages;
     }
 
     @Override
     public InlineKeyboardMarkup[] getKeyboard() {
-        return new InlineKeyboardMarkup[] {KeyboardFactory.confirmButton()};
+        return new InlineKeyboardMarkup[] {KeyboardFactory.cancelButton(), KeyboardFactory.confirmButton()};
     }
 }

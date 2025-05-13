@@ -39,22 +39,32 @@ public class CommandHandler {
             return "Команда отменена";
         }
         else if (arg.equalsIgnoreCase("confirm")) {
-            commandState = stateManager.getState(chat_id);
             String answer = command.getMsg()[currentStep];
-            commandState.nextState();
+            if (currentStep == command.getMsg().length - 1) {
+                try {
+                    command.action(commandState.getArgs(), chat_id);
+                    stateManager.clearState(chat_id);
+                    return command.getMsg()[currentStep]; // Последнее сообщение
+                } catch (SQLException e) {
+                    throw new RuntimeException("Ошибка выполнения", e);
+                }
+            }
+            else {
+                commandState.nextState();
+                stateManager.setState(chat_id, commandState);
+            }
             return answer;
         }
 
         commandState.collectArgs(arg);
         String[] messages;
-        if(currentStep < command.getMsg().length - 1) {
+        if((currentStep < command.getMsg().length - 1)) {
             messages = command.getMsg();
             setKeyboard(command.getKeyboard()[currentStep]);
             commandState.nextState();
             stateManager.setState(chat_id, commandState);
         }
         else {
-//            commandManager.exec(commandState.getCommand() + " " + commandState.getArgs(), chat_id);
             try {
                 command.action(commandState.getArgs(), chat_id);
                 messages = command.getMsg();

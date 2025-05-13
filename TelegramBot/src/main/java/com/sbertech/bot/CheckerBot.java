@@ -63,7 +63,7 @@ public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
     }
 
     private void handleCallback(CallbackQuery callbackQuery) {
-        if (callbackQuery.getData().equals("cancel")) {
+        if (isSupportedCallback(callbackQuery.getData())) {
             long chat_id = callbackQuery.getMessage().getChatId();
             String answer = messageHandler.handleMessage(callbackQuery.getData(), chat_id);
             EditMessageText editMsg = EditMessageText.builder().chatId(chat_id).messageId(callbackQuery.getMessage().getMessageId()).text(answer).build();
@@ -73,18 +73,10 @@ public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
                 e.printStackTrace();
             }
         }
+    }
 
-        else if(callbackQuery.getData().equals("confirm")) {
-            long chat_id = callbackQuery.getMessage().getChatId();
-            String answer = messageHandler.handleMessage(callbackQuery.getData(), chat_id);
-            EditMessageText editMsg = EditMessageText.builder().chatId(chat_id).messageId(callbackQuery.getMessage().getMessageId()).text(answer).build();
-
-            try {
-                telegramClient.execute(editMsg);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
+    private boolean isSupportedCallback(String name) {
+        return name.equalsIgnoreCase("cancel") || name.equalsIgnoreCase("confirm") || "123".contains(name);
     }
 
     public void notifyUser(String message, long chat_id) {
