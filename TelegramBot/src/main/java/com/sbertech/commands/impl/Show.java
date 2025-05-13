@@ -1,10 +1,12 @@
 package com.sbertech.commands.impl;
 
+import com.sbertech.bot.KeyboardFactory;
 import com.sbertech.commands.Command;
 import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
 import com.sbertech.util.FieldFormatter;
 import com.sbertech.util.PriceFormatter;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -41,4 +43,8 @@ public class Show extends Command {
         return messages;
     }
 
+    @Override
+    public InlineKeyboardMarkup[] getKeyboard() {
+        return new InlineKeyboardMarkup[] {};
+    }
 }

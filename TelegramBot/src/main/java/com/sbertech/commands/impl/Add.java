@@ -1,11 +1,13 @@
 package com.sbertech.commands.impl;
 
+import com.sbertech.bot.KeyboardFactory;
 import com.sbertech.commands.Command;
 import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
 import com.sbertech.commands.annotation.NeedsArgs;
 import com.sbertech.service.Parser;
 import com.sbertech.service.SelParser;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.sql.SQLException;
 
@@ -48,5 +50,10 @@ public class Add extends Command {
                 "3) Отслеживать любое изменение цены\n",
                 returnMsg};
         return messages;
+    }
+
+    @Override
+    public InlineKeyboardMarkup[] getKeyboard() {
+        return new InlineKeyboardMarkup[] {KeyboardFactory.cancelButton(), KeyboardFactory.modeButtons()};
     }
 }

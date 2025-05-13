@@ -1,8 +1,10 @@
 package com.sbertech.commands.impl;
 
+import com.sbertech.bot.KeyboardFactory;
 import com.sbertech.commands.Command;
 import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,5 +48,10 @@ public class Help extends Command {
     public String[] getMsg() {
         messages = new String[]{"Список комманд:\n" + returnMsg};
         return messages;
+    }
+
+    @Override
+    public InlineKeyboardMarkup[] getKeyboard() {
+        return new InlineKeyboardMarkup[] {};
     }
 }

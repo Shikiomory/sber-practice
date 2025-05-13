@@ -49,7 +49,8 @@ public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
         SendMessage msg;
 
         if (messageHandler.isActiveCommand(chat_id)) {
-            msg = SendMessage.builder().chatId(chat_id).text(message).replyMarkup(KeyboardFactory.cancelButton()).build();
+//            msg = SendMessage.builder().chatId(chat_id).text(message).replyMarkup(KeyboardFactory.cancelButton()).build();
+            msg = SendMessage.builder().chatId(chat_id).text(message).replyMarkup(messageHandler.getKeyboard()).build();
         } else {
             msg = SendMessage.builder().chatId(chat_id).text(message).replyMarkup(keyboardMarkup).build();
         }
@@ -62,10 +63,22 @@ public class CheckerBot implements LongPollingSingleThreadUpdateConsumer{
     }
 
     private void handleCallback(CallbackQuery callbackQuery) {
-        if (callbackQuery.getData().equals("/cancel")) {
+        if (callbackQuery.getData().equals("cancel")) {
             long chat_id = callbackQuery.getMessage().getChatId();
             String answer = messageHandler.handleMessage(callbackQuery.getData(), chat_id);
             EditMessageText editMsg = EditMessageText.builder().chatId(chat_id).messageId(callbackQuery.getMessage().getMessageId()).text(answer).build();
+            try {
+                telegramClient.execute(editMsg);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+
+        else if(callbackQuery.getData().equals("confirm")) {
+            long chat_id = callbackQuery.getMessage().getChatId();
+            String answer = messageHandler.handleMessage(callbackQuery.getData(), chat_id);
+            EditMessageText editMsg = EditMessageText.builder().chatId(chat_id).messageId(callbackQuery.getMessage().getMessageId()).text(answer).build();
+
             try {
                 telegramClient.execute(editMsg);
             } catch (TelegramApiException e) {

@@ -1,5 +1,8 @@
 package com.sbertech.commands.manager;
 
+import com.sbertech.bot.KeyboardFactory;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+
 public class MessageHandler {
     private CommandHandler commandHandler;
     private NonComandHandler nonComandHandler;
@@ -29,4 +32,7 @@ public class MessageHandler {
         return stateManager.getState(chat_id) != null;
     }
 
+    public InlineKeyboardMarkup getKeyboard() {
+        return commandHandler.getKeyboard();
+    }
 }

@@ -1,9 +1,11 @@
 package com.sbertech.commands.impl;
 
+import com.sbertech.bot.KeyboardFactory;
 import com.sbertech.commands.Command;
 import com.sbertech.commands.annotation.ButtonName;
 import com.sbertech.commands.annotation.CommandInfo;
 import com.sbertech.commands.annotation.NeedsArgs;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.sql.SQLException;
 
@@ -25,5 +27,10 @@ public class Delete extends Command {
     public String[] getMsg() {
         messages = new String[]{"Введите номер товара для удаления", "Товар удален из отслеживаемых"};
         return messages;
+    }
+
+    @Override
+    public InlineKeyboardMarkup[] getKeyboard() {
+        return new InlineKeyboardMarkup[] {KeyboardFactory.confirmButton()};
     }
 }
