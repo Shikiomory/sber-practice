@@ -2,17 +2,25 @@ package com.sbertech;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Parser extends Thread{
-    private Map<String, Integer> words = new HashMap<>();
+    private ConcurrentHashMap<String, Integer> words = new ConcurrentHashMap<>();
     private String path;
 
+    public Parser(String path, ConcurrentHashMap<String, Integer> words) {
+        this.path = path;
+        this.words = words;
+    }
     public void setFilePath(String path) {
         this.path = path;
     }
-    public Map<String, Integer> getWords() {
+    public ConcurrentHashMap<String, Integer> getWords() {
+        return words;
+    }
+
+    @Override
+    public void run() {
         try {
             Reader reader = new BaseReader(path);
             String Line;
@@ -25,18 +33,10 @@ public class Parser extends Thread{
                     }
                 }
             }
-
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return words;
-    }
-
-    @Override
-    public void run() {
-        getWords();
     }
 }

@@ -1,5 +1,9 @@
 package com.sbertech;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class FreqDictionary {
     private String path;
 
@@ -8,8 +12,8 @@ public class FreqDictionary {
     }
 
     public void exec() {
-        Parser parser = new Parser();
-        parser.setFilePath(path);
+        ConcurrentHashMap<String, Integer> words = new ConcurrentHashMap<>();
+        Parser parser = new Parser(path, words);
         SortWords sw = new SortWords(parser.getWords());
         Writer writer = new BaseWriter(sw.getWords());
         writer.print();
