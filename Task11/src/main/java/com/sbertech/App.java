@@ -17,21 +17,22 @@ public class App
 {
     public static void main( String[] args )
     {
-        Map<String, Integer> ws = new HashMap<>();
         int n = Integer.valueOf(args[0]);
+        ConcurrentHashMap<String, Integer> words = new ConcurrentHashMap<>();
         FilesGetter filesGetter = new FilesGetter();
         List<Path> allFiles = new ArrayList<>();
         Path rootPath = Paths.get(args[1]);
         String exitFile = args[2];
+
         try {
             filesGetter.listAllFiles(rootPath, allFiles);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ConcurrentHashMap<String, Integer> words = new ConcurrentHashMap<>();
+
+        System.out.println("Количество файлов: " + allFiles.size());
 
         long startTime = System.currentTimeMillis();
-        System.out.println("Количество файлов: " + allFiles.size());
         int i = 0;
         while (i < allFiles.size()) {
 
