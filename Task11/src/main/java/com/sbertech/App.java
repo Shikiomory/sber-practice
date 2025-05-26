@@ -28,17 +28,24 @@ public class App
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String a = String.valueOf(allFiles.get(0));
         ConcurrentHashMap<String, Integer> words = new ConcurrentHashMap<>();
 
         long startTime = System.currentTimeMillis();
+
         int i = 0;
-        for (; i < allFiles.size(); i += n) {
+        while (i < allFiles.size()) {
+
+            while (i + n > allFiles.size()) {
+                n--;
+            }
+
             List<Thread> threads = new ArrayList<>();
-            for (int j = i; (j < i + n) && (i + n < allFiles.size()); j++) {
+            int j = i;
+            while (j < i + n) {
                 Parser parser = new Parser(String.valueOf(allFiles.get(j)), words);
                 parser.start();
                 threads.add(parser);
+                j++;
             }
 
             for(Thread t: threads) {
@@ -48,23 +55,13 @@ public class App
                     throw new RuntimeException(e);
                 }
             }
+            i+=n;
         }
-        List<Thread> threads = new ArrayList<>();
-        for (; i < allFiles.size(); i++) {
-            Parser parser = new Parser(String.valueOf(allFiles.get(i)), words);
-            parser.start();
-            threads.add(parser);
-        }
-        for(Thread t: threads) {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+
         SortWords sortWords = new SortWords(words);
         Writer writer = new FileWriterZ(sortWords.getWords(), exitFile);
         writer.print();
+
         long endTime = System.currentTimeMillis();
         System.out.printf("Затраченное время: %s мс", endTime - startTime);
     }

@@ -12,9 +12,7 @@ public class Parser extends Thread{
         this.path = path;
         this.words = words;
     }
-    public void setFilePath(String path) {
-        this.path = path;
-    }
+
     public ConcurrentHashMap<String, Integer> getWords() {
         return words;
     }
