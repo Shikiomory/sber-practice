@@ -31,7 +31,7 @@ public class App
         ConcurrentHashMap<String, Integer> words = new ConcurrentHashMap<>();
 
         long startTime = System.currentTimeMillis();
-
+        System.out.println(allFiles.size());
         int i = 0;
         while (i < allFiles.size()) {
 
