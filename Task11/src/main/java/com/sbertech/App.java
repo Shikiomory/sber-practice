@@ -31,7 +31,7 @@ public class App
         ConcurrentHashMap<String, Integer> words = new ConcurrentHashMap<>();
 
         long startTime = System.currentTimeMillis();
-        System.out.println(allFiles.size());
+        System.out.println("Количество файлов: " + allFiles.size());
         int i = 0;
         while (i < allFiles.size()) {
 
@@ -67,13 +67,20 @@ public class App
     }
 }
 
-//1 - 882
-//2 - 679
-//3 - 521
-//4 - 449
-//5 - 436 - нормально
-//6 - 453
-//7 - 426 - нормальнее
-//8 - 446
-//9 - 472
-//дальше хуже
+//1 - 2047
+//2 - 1604
+//3 - 1284
+//4 - 1224
+//5 - 1142
+//6 - 1125
+//7 - 1123
+//8 - 1119
+//9 - 1108
+//10 - 1020
+//11 - 1004 нормально
+//12 - 1028
+//13 - 1043
+//14 - 1055
+//15 - 1084
+//20 - 1210
+//30 - 1876
