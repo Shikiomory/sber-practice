@@ -16,20 +16,34 @@ import java.util.Map;
 @NeedsArgs
 public class Delete extends Command {
     private String returnMsg;
-    @Override
-    public void action(String[] args, long chat_id) throws SQLException, IndexOutOfBoundsException{
-        String sql = "Delete From tasks WHERE UID = ? AND ChatId = ?";
-        String uid = args[0];
-        String[] params = {uid, String.valueOf(chat_id)};
 
-        String sqlSelect = String.format("SELECT * FROM tasks WHERE ChatId = '%s' AND UID = '%s'", String.valueOf(chat_id), uid);
-        List<Map<String, Object>> rows = database.execQuery(sqlSelect);
-        if (!rows.isEmpty()) {
-            database.execUpdate(sql, params);
-            returnMsg = "Товар удален из отслеживаемых";
-        }
-        else {
-            returnMsg = "Нет такого товара";
+    @Override
+    public void action(String[] args, long chat_id) throws SQLException {
+        try {
+            int productIdToDelete = Integer.parseInt(args[0]);
+            String chatId = String.valueOf(chat_id);
+
+            // Проверка существования товара
+            String checkSql = "SELECT * FROM tasks WHERE ChatId = ? AND productId = ?";
+            List<Map<String, Object>> rows = database.execQuery(checkSql, new String[]{chatId, String.valueOf(productIdToDelete)});
+
+            if (rows.isEmpty()) {
+                returnMsg = "Нет такого товара";
+                return;
+            }
+
+            // Удаление товара
+            String deleteSql = "DELETE FROM tasks WHERE ChatId = ? AND productId = ?";
+            database.execUpdate(deleteSql, new String[]{chatId, String.valueOf(productIdToDelete)});
+
+            // Обновление номеров оставшихся товаров
+            String updateSql = "UPDATE tasks SET productId = productId - 1 WHERE ChatId = ? AND productId > ?";
+            database.execUpdate(updateSql, new String[]{chatId, String.valueOf(productIdToDelete)});
+
+            returnMsg = "Товар успешно удалён";
+
+        } catch (NumberFormatException e) {
+            returnMsg = "Неверный формат номера товара";
         }
     }
 

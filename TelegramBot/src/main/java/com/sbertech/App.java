@@ -43,7 +43,7 @@ public class App
 
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.scheduleJob(job, trigger);
-            scheduler.start();
+//            scheduler.start();
             System.out.println("Планировщик запущен!");
 
 

@@ -33,14 +33,15 @@ public class PriceChecker implements Job {
     public PriceChecker() {}
 
     private void checkPrices() throws SQLException {
-        String sql = "SELECT * FROM tasks";
-        List<Map<String, Object>> rows = database.execQuery(sql);;
-        for (Map<String, Object> row: rows) {
-            float price = Float.valueOf((String)row.get("Price"));
-            Parser parser = new SelParser((String)row.get("Url"));
+        String sql = "SELECT * FROM tasks WHERE ChatId = ?"; // Добавляем фильтр по ChatId
+        List<Map<String, Object>> rows = database.execQuery(sql, new String[]{});
+        for (Map<String, Object> row : rows) {
+            float price = Float.parseFloat(row.get("Price").toString());
+            Parser parser = new SelParser((String) row.get("Url"));
             float newPrice = parser.getPrice();
 
-            String mode = (String)row.get("Mode");
+            String mode = row.get("Mode").toString();
+
 
             if (newPrice == -1) {
                 checkerBot.sendMsg(String.format("Возникла ошибка с товаром, %s, возможно его больше не существует", (String)row.get("Name")),Long.valueOf((String)row.get("ChatId")));

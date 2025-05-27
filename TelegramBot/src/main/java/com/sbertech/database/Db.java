@@ -24,21 +24,24 @@ public class Db {
 
     private void createTable(Connection connection) throws SQLException {
         String sql = """
-                CREATE TABLE IF NOT EXISTS tasks (
-                UID INT PRIMARY KEY AUTO_INCREMENT,
-                Name VARCHAR(200),
-                Url VARCHAR(200),
-                Price FLOAT,
-                Mode INT,
-                ChatId VARCHAR(200)
-                )
-                """;
+            CREATE TABLE IF NOT EXISTS tasks (
+            UID INT PRIMARY KEY AUTO_INCREMENT,
+            productId INT,
+            Name VARCHAR(200),
+            Url VARCHAR(200),
+            Price FLOAT,
+            Mode INT,
+            ChatId VARCHAR(200),
+            UNIQUE (ChatId, productId)
+            )
+            """;
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
             System.out.println("Таблица создана!");
         }
     }
+
 
     private void initTable() {
         try  {
@@ -72,26 +75,21 @@ public class Db {
     }
 
 
-    public List<Map<String, Object>> execQuery(String sql) throws SQLException {
+    public List<Map<String, Object>> execQuery(String sql, String[] args) throws SQLException {
         List<Map<String, Object>> resultList = new ArrayList<>();
-        try (Statement statement = connection.createStatement()){
-
-            try(ResultSet resultSet = statement.executeQuery(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < args.length; i++) {
+                statement.setString(i + 1, args[i]);
+            }
+            try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Map<String, Object> row = new LinkedHashMap<>();
-                    int uid = resultSet.getInt("UID");
-                    String name = resultSet.getString("Name");
-                    String url = resultSet.getString("Url");
-                    String price = resultSet.getString("Price");
-                    String chatId = resultSet.getString("ChatId");
-                    String mode = resultSet.getString("Mode");
-                    row.put("UID", uid);
-                    row.put("Name", name);
-                    row.put("Url", url);
-                    row.put("Price", price);
-                    row.put("ChatId", chatId);
-                    row.put("Mode", mode);
-//                    returnMsg += String.format("UID: %d, Name: %s, Url: %s Price: %s%n", uid, name, url, price);
+                    row.put("productId", resultSet.getInt("productId"));
+                    row.put("Name", resultSet.getString("Name"));
+                    row.put("Url", resultSet.getString("Url"));
+                    row.put("Price", resultSet.getString("Price"));
+                    row.put("ChatId", resultSet.getString("ChatId"));
+                    row.put("Mode", resultSet.getString("Mode"));
                     resultList.add(row);
                 }
             }

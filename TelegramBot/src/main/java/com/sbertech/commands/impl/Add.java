@@ -18,7 +18,11 @@ public class Add extends Command {
     private String returnMsg = "";
     @Override
     public void action(String[] args, long chat_id) throws SQLException, IndexOutOfBoundsException{
-        String sql = "INSERT INTO tasks (Name, Url, Price, Mode, ChatId) VALUES (?, ?, ?, ?, ?)";
+        String sql = """
+            INSERT INTO tasks (productId, Name, Url, Price, Mode, ChatId)
+            SELECT COALESCE(MAX(productId), 0) + 1, ?, ?, ?, ?, ?
+            FROM tasks WHERE ChatId = ?
+            """;
         String url = args[0];
         String mode = args[1];
         Parser parser = new SelParser(url);
@@ -29,7 +33,7 @@ public class Add extends Command {
             if (Integer.valueOf(mode) > 3 || Integer.valueOf(mode) < 0) {
                 returnMsg = "Нет такого режима отслеживания!";
             } else {
-                String[] params = {name, url, price, mode, String.valueOf(chat_id)};
+                String[] params = {name, url, price, mode, String.valueOf(chat_id), String.valueOf(chat_id)};
                 database.execUpdate(sql, params);
 
                 returnMsg = "Товар добавлен в отслеживаемые";

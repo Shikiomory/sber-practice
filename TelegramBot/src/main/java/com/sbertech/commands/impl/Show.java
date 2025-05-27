@@ -21,25 +21,44 @@ public class Show extends Command {
     @Override
     public void action(String[] args, long chat_id) throws SQLException {
         PriceFormatter priceFormatter = new PriceFormatter();
-        String sql = String.format("SELECT * FROM tasks WHERE ChatId = '%s'", String.valueOf(chat_id));
+        String sql = "SELECT productId, Name, Url, Price, Mode, ChatId FROM tasks WHERE ChatId = ? ORDER BY productId"; // Убрали Mode и ChatId
         returnMsg = "";
-        List<Map<String, Object>> rows = database.execQuery(sql);
-        for (Map<String, Object> row : rows) {
-            for (String elem: row.keySet()) {
-                if (elem.equalsIgnoreCase("Price")) {
-                    returnMsg += String.format("%s: %s\n", fieldFormatter.getFormName(elem), priceFormatter.format(Float.valueOf((String)row.get(elem))));
-                }
-                else if (!elem.equalsIgnoreCase("ChatId") && !elem.equalsIgnoreCase("Mode")){
-                    returnMsg += String.format("%s: %s\n", fieldFormatter.getFormName(elem), row.get(elem));
-                }
-            }
-            returnMsg += "\n";
+
+        List<Map<String, Object>> rows = database.execQuery(sql, new String[]{String.valueOf(chat_id)});
+
+        if (rows.isEmpty()) {
+            returnMsg = "Нет отслеживаемых товаров";
+            return;
         }
+
+        StringBuilder sb = new StringBuilder();
+        for (Map<String, Object> row : rows) {
+            sb.append(String.format("#%d%n", row.get("productId")));
+
+            // Явно обрабатываем нужные поля
+            sb.append(String.format("%s: %s%n",
+                    fieldFormatter.getFormName("Name"),
+                    row.get("Name")));
+
+            sb.append(String.format("%s: %s%n",
+                    fieldFormatter.getFormName("Url"),
+                    row.get("Url")));
+
+            String formattedPrice = priceFormatter.format(
+                    Float.parseFloat(row.get("Price").toString()));
+            sb.append(String.format("%s: %s%n%n",
+                    fieldFormatter.getFormName("Price"),
+                    formattedPrice));
+        }
+
+        returnMsg = sb.toString();
     }
 
     @Override
     public String[] getMsg() {
-        messages = new String[]{returnMsg.isEmpty() ? "Нет отслеживаемых товаров" : "Список отслеживаемых товаров:\n" + returnMsg};
+        messages = new String[]{returnMsg.startsWith("#")
+                ? "Список отслеживаемых товаров:\n" + returnMsg
+                : returnMsg};
         return messages;
     }
 
